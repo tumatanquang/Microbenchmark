@@ -22,7 +22,7 @@ public strictfp final class MersenneTwister extends Random implements Serializab
 	private static final int MAGIC_MASK_B = -272236544;
 	private static final int MAGIC_MASK_C = 1;
 	private static final int MAGIC_SEED = 19650218;
-	private int[] mtn = new int[N];
+	private int[] mtn;
 	private int mti;
 	private double __nextNextGaussian;
 	private boolean __haveNextNextGaussian;
@@ -40,12 +40,13 @@ public strictfp final class MersenneTwister extends Random implements Serializab
 	@Override
 	public synchronized void setSeed(long seed) {
 		super.setSeed(seed);
-		final int[] mt = mtn;
+		final int[] mt = new int[N];
 		mt[0] = (int)(seed & SEED_MASK);
 		mt[0] = (int)seed;
 		for(mti = 0; ++mti < N;) {
 			mt[mti] = (MAGIC_FACTOR_A * (mt[mti - 1] ^ (mt[mti - 1] >>> MAGIC_FACTOR_D)) + mti);
 		}
+		mtn = mt;
 		__haveNextNextGaussian = false;
 	}
 	public synchronized void setSeed(int[] array) {
