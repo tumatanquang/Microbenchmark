@@ -13,19 +13,19 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 3)
+@Warmup(iterations = 5)
 @Measurement(iterations = 5)
 @Fork(1)
 @State(Scope.Thread)
 public class MyBenchmark {
-	private MersenneTwister MT_RAND;
-	private static MersenneTwister MT_SRAND;
-	private final MersenneTwister MT_FRAND = new MersenneTwister();
-	private static final MersenneTwister MT_SFRAND = new MersenneTwister();
-	private MersenneTwisterFast MTF_RAND;
-	private static MersenneTwisterFast MTF_SRAND;
-	private final MersenneTwisterFast MTF_FRAND = new MersenneTwisterFast();
-	private static final MersenneTwisterFast MTF_SFRAND = new MersenneTwisterFast();
+	public MersenneTwister MT_RAND;
+	public static MersenneTwister MT_SRAND;
+	public final MersenneTwister MT_FRAND = new MersenneTwister();
+	public static final MersenneTwister MT_SFRAND = new MersenneTwister();
+	public MersenneTwisterFast MTF_RAND;
+	public static MersenneTwisterFast MTF_SRAND;
+	public final MersenneTwisterFast MTF_FRAND = new MersenneTwisterFast();
+	public static final MersenneTwisterFast MTF_SFRAND = new MersenneTwisterFast();
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
 	@Setup
