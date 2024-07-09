@@ -1,5 +1,4 @@
 package edu.sample.microbenchmark;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -19,57 +18,69 @@ import org.openjdk.jmh.annotations.Warmup;
 @Fork(1)
 @State(Scope.Thread)
 public class MyBenchmark {
-	private static Random SRAND;
-	private final Random FRAND = new Random();
-	private static final Random SFRAND = new Random();
-	private static MersenneTwisterFast MT_SRAND;
-	private final MersenneTwisterFast MT_FRAND = new MersenneTwisterFast();
-	private static final MersenneTwisterFast MT_SFRAND = new MersenneTwisterFast();
+	private MersenneTwister MT_RAND;
+	private static MersenneTwister MT_SRAND;
+	private final MersenneTwister MT_FRAND = new MersenneTwister();
+	private static final MersenneTwister MT_SFRAND = new MersenneTwister();
+	private MersenneTwisterFast MTF_RAND;
+	private static MersenneTwisterFast MTF_SRAND;
+	private final MersenneTwisterFast MTF_FRAND = new MersenneTwisterFast();
+	private static final MersenneTwisterFast MTF_SFRAND = new MersenneTwisterFast();
+	@Param({"1000", "10000", "100000", "1000000"})
+	public int iterations;
 	@Setup
 	public void setUp() {
-		SRAND = new Random();
-		MT_SRAND = new MersenneTwisterFast();
+		MT_RAND = new MersenneTwister();
+		MT_SRAND = new MersenneTwister();
+		MTF_RAND = new MersenneTwisterFast();
+		MTF_SRAND = new MersenneTwisterFast();
 	}
-	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void RandStaticNextInt(int iterations) {
+	public void MT_RandNextInt() {
 		for(int i = 0; i < iterations; ++i) {
-			SRAND.nextInt();
+			MT_RAND.nextInt();
 		}
 	}
-	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void RandFinalNextInt(int iterations) {
-		for(int i = 0; i < iterations; ++i) {
-			FRAND.nextInt();
-		}
-	}
-	@Param({"1000", "10000", "100000", "1000000"})
-	@Benchmark
-	public void RandStaticFinalNextInt(int iterations) {
-		for(int i = 0; i < iterations; ++i) {
-			SFRAND.nextInt();
-		}
-	}
-	@Param({"1000", "10000", "100000", "1000000"})
-	@Benchmark
-	public void MTRandStaticNextInt(int iterations) {
+	public void MT_RandStaticNextInt() {
 		for(int i = 0; i < iterations; ++i) {
 			MT_SRAND.nextInt();
 		}
 	}
-	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void MTRandFinalNextInt(int iterations) {
+	public void MT_RandFinalNextInt() {
 		for(int i = 0; i < iterations; ++i) {
 			MT_FRAND.nextInt();
 		}
 	}
-	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void MTRandStaticFinalNextInt(int iterations) {
+	public void MT_RandStaticFinalNextInt() {
 		for(int i = 0; i < iterations; ++i) {
 			MT_SFRAND.nextInt();
+		}
+	}
+	@Benchmark
+	public void MTF_RandNextInt() {
+		for(int i = 0; i < iterations; ++i) {
+			MTF_RAND.nextInt();
+		}
+	}
+	@Benchmark
+	public void MTF_RandStaticNextInt() {
+		for(int i = 0; i < iterations; ++i) {
+			MTF_SRAND.nextInt();
+		}
+	}
+	@Benchmark
+	public void MTF_RandFinalNextInt() {
+		for(int i = 0; i < iterations; ++i) {
+			MTF_FRAND.nextInt();
+		}
+	}
+	@Benchmark
+	public void MTF_RandStaticFinalNextInt() {
+		for(int i = 0; i < iterations; ++i) {
+			MTF_SFRAND.nextInt();
 		}
 	}
 }
