@@ -27,7 +27,7 @@ public strictfp final class MersenneTwisterFast {
 	private static final int MAGIC_MASK_G = 15;
 	private static final int MAGIC_MASK_H = 24;
 	private static final int MAGIC_SEED = 19650218;
-	private int[] mtn = new int[N];
+	private int[] mtn;
 	private int mti;
 	private double __nextNextGaussian;
 	private boolean __haveNextNextGaussian;
@@ -41,11 +41,12 @@ public strictfp final class MersenneTwisterFast {
 		setSeed(seed);
 	}
 	public void setSeed(long seed) {
-		final int[] mt = mtn;
+		final int[] mt = new int[N];
 		mt[0] = (int)(seed & SEED_MASK);
 		for(mti = 0; ++mti < N;) {
 			mt[mti] = (MAGIC_FACTOR_A * (mt[mti - 1] ^ (mt[mti - 1] >>> MAGIC_FACTOR_D)) + mti);
 		}
+		mtn = mt;
 		__haveNextNextGaussian = false;
 	}
 	public void setSeed(int[] array) {
