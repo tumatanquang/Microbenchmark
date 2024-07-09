@@ -25,45 +25,49 @@ public class MyBenchmark {
 	private static MersenneTwisterFast MT_SRAND;
 	private final MersenneTwisterFast MT_FRAND = new MersenneTwisterFast();
 	private static final MersenneTwisterFast MT_SFRAND = new MersenneTwisterFast();
-	@Param({"1000", "10000", "100000", "1000000"})
-	private int iterations;
 	@Setup
 	public void setUp() {
 		SRAND = new Random();
 		MT_SRAND = new MersenneTwisterFast();
 	}
+	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void RandStaticNextInt() {
+	public void RandStaticNextInt(int iterations) {
 		for(int i = 0; i < iterations; ++i) {
 			SRAND.nextInt();
 		}
 	}
+	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void RandFinalNextInt() {
+	public void RandFinalNextInt(int iterations) {
 		for(int i = 0; i < iterations; ++i) {
 			FRAND.nextInt();
 		}
 	}
+	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void RandStaticFinalNextInt() {
+	public void RandStaticFinalNextInt(int iterations) {
 		for(int i = 0; i < iterations; ++i) {
 			SFRAND.nextInt();
 		}
 	}
+	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void MTRandStaticNextInt() {
+	public void MTRandStaticNextInt(int iterations) {
 		for(int i = 0; i < iterations; ++i) {
 			MT_SRAND.nextInt();
 		}
 	}
+	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void MTRandFinalNextInt() {
+	public void MTRandFinalNextInt(int iterations) {
 		for(int i = 0; i < iterations; ++i) {
 			MT_FRAND.nextInt();
 		}
 	}
+	@Param({"1000", "10000", "100000", "1000000"})
 	@Benchmark
-	public void MTRandStaticFinalNextInt() {
+	public void MTRandStaticFinalNextInt(int iterations) {
 		for(int i = 0; i < iterations; ++i) {
 			MT_SFRAND.nextInt();
 		}
