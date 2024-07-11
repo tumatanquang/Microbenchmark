@@ -27,6 +27,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 class BenchmarkDecimalFormat {
 	public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US);
 	public static final DecimalFormat DF = new DecimalFormat("0.##", SYMBOLS);
+	public static final GptDecimalFormat GDF = new GptDecimalFormat("0.##");
+	public static final CompilotDecimalFormat CDF = new CompilotDecimalFormat("0.##");
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
 	public float[] floatValues;
@@ -38,9 +40,21 @@ class BenchmarkDecimalFormat {
 		}
 	}
 	@Benchmark
-	public void benchmarkDecimalFormat() {
+	public void decimalFormat() {
 		for(float value : floatValues) {
 			DF.format(value);
+		}
+	}
+	@Benchmark
+	public void gptDecimalFormat() {
+		for(float value : floatValues) {
+			DF.format(value);
+		}
+	}
+	@Benchmark
+	public void compilotDecimalFormat() {
+		for(float value : floatValues) {
+			CDF.format(value);
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
