@@ -11,15 +11,13 @@ public class CompilotDecimalFormat {
 		return formatInternal(value);
 	}
 	private String formatInternal(double value) {
-		String stringValue = Double.toString(value);
+		String stringValue = String.valueOf(value);
 		int decimalSeparatorIndex = stringValue.indexOf('.');
-		if(decimalSeparatorIndex < 0)
-			return stringValue;
-		int numDecimalPlaces = stringValue.length() - decimalSeparatorIndex - 1,
-		maxDecimalPlaces = mPattern.length() - mPattern.indexOf('.') - 1;
+		if(decimalSeparatorIndex < 0) return stringValue;
+		int numDecimalPlaces = stringValue.length() - decimalSeparatorIndex - 1, maxDecimalPlaces = mPattern.length() - mPattern.indexOf('.') - 1;
 		if(numDecimalPlaces > maxDecimalPlaces) {
 			double roundedValue = Math.round(value * Math.pow(10, maxDecimalPlaces)) / Math.pow(10, maxDecimalPlaces);
-			stringValue = Double.toString(roundedValue);
+			stringValue = String.valueOf(roundedValue);
 		}
 		return stringValue;
 	}
