@@ -104,7 +104,7 @@ public class BenchmarkMultiThreadArrayList {
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder().include(BenchmarkMultiThreadedArrayList.class.getSimpleName()).build();
+		Options opt = new OptionsBuilder().include(BenchmarkMultiThreadArrayList.class.getSimpleName()).build();
 		new Runner(opt).run();
 	}
 }

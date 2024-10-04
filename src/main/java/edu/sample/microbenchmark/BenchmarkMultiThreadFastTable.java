@@ -104,7 +104,7 @@ public class BenchmarkMultiThreadFastTable {
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder().include(BenchmarkMultiThreadedFastTable.class.getSimpleName()).build();
+		Options opt = new OptionsBuilder().include(BenchmarkMultiThreadFastTable.class.getSimpleName()).build();
 		new Runner(opt).run();
 	}
 }

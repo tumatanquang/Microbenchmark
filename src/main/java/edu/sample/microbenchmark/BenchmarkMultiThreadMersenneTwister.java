@@ -94,7 +94,7 @@ public class BenchmarkMultiThreadMersenneTwister {
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder().include(BenchmarkMultiThreadedMersenneTwister.class.getSimpleName()).build();
+		Options opt = new OptionsBuilder().include(BenchmarkMultiThreadMersenneTwister.class.getSimpleName()).build();
 		new Runner(opt).run();
 	}
 }

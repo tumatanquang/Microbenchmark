@@ -98,7 +98,7 @@ public class BenchmarkSingleThreadJavolution6 {
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder().include(BenchmarkSingleThreadedJavolution6.class.getSimpleName()).build();
+		Options opt = new OptionsBuilder().include(BenchmarkSingleThreadJavolution6.class.getSimpleName()).build();
 		new Runner(opt).run();
 	}
 }
