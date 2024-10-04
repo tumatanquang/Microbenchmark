@@ -1,0 +1,42 @@
+name: JMH Benchmark Multi Thread FastTable
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/main/java/edu/sample/microbenchmark/BenchmarkMultiThreadFastTable.java
+  pull_request:
+    branches:
+      - main
+    paths:
+      - src/main/java/edu/sample/microbenchmark/BenchmarkMultiThreadFastTable.java
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+
+      - name: Set up Maven Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and run benchmarks
+        run: mvn clean install
+
+      - name: Run JMH Benchmarks
+        run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkMultiThreadFastTable"
