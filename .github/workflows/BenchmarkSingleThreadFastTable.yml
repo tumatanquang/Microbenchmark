@@ -1,4 +1,4 @@
-name: JMH Benchmark Multi Thread FastTable
+name: JMH Benchmark Single Thread FastTable
 
 on:
   push:
