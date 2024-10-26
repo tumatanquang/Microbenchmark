@@ -1,5 +1,4 @@
 package edu.sample.microbenchmark;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -36,19 +35,25 @@ public class BenchmarkMultiThreadThreetenBackport {
 	@Benchmark
 	public void DateGetTime(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
-			bh.consume(new Date().getTime());
+			bh.consume(new java.util.Date().getTime());
 		}
 	}
 	@Benchmark
-	public void ThreeTenBackportInstant(Blackhole bh) {
+	public void GregorianCalendarGetTime(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
-			bh.consume(org.threeten.bp.Instant.now().toEpochMilli());
+			bh.consume(java.util.GregorianCalendar.getInstance().getTimeInMillis());
 		}
 	}
 	@Benchmark
-	public void JavaTimeInstance(Blackhole bh) {
+	public void ThreeTenBackportClock(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
-			bh.consume(java.time.Instant.now().toEpochMilli());
+			bh.consume(org.threeten.bp.Clock.systemUTC().millis());
+		}
+	}
+	@Benchmark
+	public void JavaTimeClock(Blackhole bh) {
+		for(int i = -1; ++i < iterations;) {
+			bh.consume(java.time.Clock.systemUTC().millis());
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
