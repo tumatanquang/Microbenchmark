@@ -105,6 +105,11 @@
 			<version>${jmh.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.threeten</groupId>
+			<artifactId>threetenbp</artifactId>
+			<version>1.7.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
