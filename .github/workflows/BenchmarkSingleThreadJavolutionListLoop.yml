@@ -26,6 +26,10 @@ jobs:
         with:
           java-version: '8'
           distribution: 'temurin'
+
+      - name: Create repository directory for javolution
+        run: mkdir -p ~/.m2/repository/javolution/javolution/5.6.0
+
       - name: Copy javolution-5.6.0_6.jar
         run: cp lib/javolution-5.6.0_6.jar ~/.m2/repository/javolution/javolution/5.6.0/javolution-5.6.0.jar
 
