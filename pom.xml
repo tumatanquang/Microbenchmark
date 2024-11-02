@@ -25,7 +25,7 @@
 					<artifactId>javolution</artifactId>
 					<version>5.6.0_6</version>
 					<scope>system</scope>
-					<systemPath>${basedir}/lib/javolution-5.6.0_6.jar</systemPath>
+					<systemPath>${pom.basedir}/lib/javolution-5.6.0_6.jar</systemPath>
 				</dependency>
 			</dependencies>
 		</profile>
