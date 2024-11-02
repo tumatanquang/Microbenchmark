@@ -1,7 +1,6 @@
 package uc.util;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javolution.util.FastTable;
+import javolution.util.ReentrantLock;
 public class ConcurrentFastTable<E> extends FastTable<E> {
 	private static final long serialVersionUID = 2781771606854788734L;
 	public ConcurrentFastTable() {
@@ -10,128 +9,115 @@ public class ConcurrentFastTable<E> extends FastTable<E> {
 	public ConcurrentFastTable(int capacity) {
 		super(capacity);
 	}
-	public boolean addElement(E value) {
-		return super.add(value);
-	}
-	public void clearAll() {
-		super.clear();
-	}
-	public boolean contain(Object o) {
-		return super.contains(o);
-	}
-	public E getElement(int index) {
-		return super.get(index);
-	}
-	public int getIndexOf(Object o) {
-		return super.indexOf(o);
-	}
-	public boolean empty() {
-		return super.isEmpty();
-	}
-	public E removeElement(int index) {
-		return super.remove(index);
-	}
-	public int getSize() {
-		return super.size();
-	}
 	@Override
 	public final ConcurrentFastTable<E> shared() {
-		return new Shared();
+		return new Shared(this);
 	}
 	private final class Shared extends ConcurrentFastTable<E> {
 		private static final long serialVersionUID = 29253114956268253L;
-		private final ReadWriteLock lock;
-		private Shared() {
-			lock = new ReentrantReadWriteLock();
+		private final ConcurrentFastTable<E> table;
+		private final ReentrantLock rwLock;
+		private Shared(ConcurrentFastTable<E> target) {
+			table = target;
+			rwLock = new ReentrantLock();
 		}
 		@Override
-		public boolean addElement(E value) {
-			lock.writeLock().lock();
+		public boolean add(E value) {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.add(value);
+				return table.add(value);
 			}
 			finally {
-				lock.writeLock().unlock();
-			}
-		}
-		@Override
-		public void clearAll() {
-			lock.writeLock().lock();
-			try {
-				super.clear();
-			}
-			finally {
-				lock.writeLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
-		public boolean contain(Object o) {
-			lock.readLock().lock();
+		public void clear() {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.contains(o);
+				table.clear();
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
-		public E getElement(int index) {
-			lock.readLock().lock();
+		public boolean contains(Object o) {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.get(index);
+				return table.contains(o);
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
-		public int getIndexOf(Object o) {
-			lock.readLock().lock();
+		public E get(int index) {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.indexOf(o);
+				return table.get(index);
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
-		public boolean empty() {
-			lock.readLock().lock();
+		public int indexOf(Object o) {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.isEmpty();
+				return table.indexOf(o);
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
-		public E removeElement(int index) {
-			lock.writeLock().lock();
+		public boolean isEmpty() {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.remove(index);
+				return table.isEmpty();
 			}
 			finally {
-				lock.writeLock().unlock();
+				lock.unlock();
+			}
+		}
+		@Override
+		public E remove(int index) {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
+			try {
+				return table.remove(index);
+			}
+			finally {
+				lock.unlock();
 			}
 		}
 		@Override
 		public boolean remove(Object o) {
-			lock.writeLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.remove(o);
+				return table.remove(o);
 			}
 			finally {
-				lock.writeLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
-		public int getSize() {
-			lock.readLock().lock();
+		public int size() {
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.size();
+				return table.size();
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 	}

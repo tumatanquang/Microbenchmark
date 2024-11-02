@@ -1,7 +1,6 @@
 package uc.util;
 import java.util.ArrayList;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import edu.emory.mathcs.backport.java.util.concurrent.locks.ReentrantLock;
 public class ConcurrentArrayList<E> extends ArrayList<E> {
 	private static final long serialVersionUID = -6881913451159539758L;
 	public ConcurrentArrayList() {
@@ -11,102 +10,113 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 		super(initialCapacity);
 	}
 	public final ConcurrentArrayList<E> shared() {
-		return new Shared();
+		return new Shared(this);
 	}
 	private final class Shared extends ConcurrentArrayList<E> {
 		private static final long serialVersionUID = 5903643726292984434L;
-		private final ReadWriteLock lock;
-		private Shared() {
-			lock = new ReentrantReadWriteLock();
+		private final ConcurrentArrayList<E> list;
+		private final ReentrantLock rwLock;
+		private Shared(ConcurrentArrayList<E> target) {
+			list = target;
+			rwLock = new ReentrantLock();
 		}
 		@Override
 		public boolean add(E value) {
-			lock.writeLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.add(value);
+				return list.add(value);
 			}
 			finally {
-				lock.writeLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public void clear() {
-			lock.writeLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				super.clear();
+				list.clear();
 			}
 			finally {
-				lock.writeLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public boolean contains(Object o) {
-			lock.readLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.contains(o);
+				return list.contains(o);
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public E get(int index) {
-			lock.readLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.get(index);
+				return list.get(index);
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public int indexOf(Object o) {
-			lock.readLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.indexOf(o);
+				return list.indexOf(o);
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public boolean isEmpty() {
-			lock.readLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.isEmpty();
+				return list.isEmpty();
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public E remove(int index) {
-			lock.writeLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.remove(index);
+				return list.remove(index);
 			}
 			finally {
-				lock.writeLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public boolean remove(Object o) {
-			lock.writeLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.remove(o);
+				return list.remove(o);
 			}
 			finally {
-				lock.writeLock().unlock();
+				lock.unlock();
 			}
 		}
 		@Override
 		public int size() {
-			lock.readLock().lock();
+			final ReentrantLock lock = rwLock;
+			lock.lock();
 			try {
-				return super.size();
+				return list.size();
 			}
 			finally {
-				lock.readLock().unlock();
+				lock.unlock();
 			}
 		}
 	}
