@@ -19,7 +19,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import uc.util.ConcurrentFastTable;
-import uc.util.SyncFastTable;
+import uc.util.SynchronizedFastTable;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
@@ -28,7 +28,7 @@ import uc.util.SyncFastTable;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkMultiThreadFastTable {
-	public SyncFastTable<Double> syncTable;
+	public SynchronizedFastTable<Double> syncTable;
 	public ConcurrentFastTable<Double> concurrentTable;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
@@ -42,65 +42,65 @@ public class BenchmarkMultiThreadFastTable {
 	}
 	@Setup(Level.Invocation)
 	public void setUpForAdd() {
-		syncTable = new SyncFastTable<Double>(iterations).shared();
+		syncTable = new SynchronizedFastTable<Double>(iterations).shared();
 		concurrentTable = new ConcurrentFastTable<Double>(iterations).shared();
 	}
 	@Setup(Level.Invocation)
 	public void setUpForRemove() {
-		syncTable = new SyncFastTable<Double>(iterations).shared();
+		syncTable = new SynchronizedFastTable<Double>(iterations).shared();
 		concurrentTable = new ConcurrentFastTable<Double>(iterations).shared();
 		for(int i = 0; i < iterations; ++i) {
 			double value = randomValues[i];
-			syncTable.addElement(value);
-			concurrentTable.addElement(value);
+			syncTable.add(value);
+			concurrentTable.add(value);
 		}
 	}
 	@Benchmark
 	public void SyncListAdd() {
 		for(int i = 0; i < iterations; ++i) {
-			syncTable.addElement(randomValues[i]);
+			syncTable.add(randomValues[i]);
 		}
 	}
 	@Benchmark
 	public void ConcurrentListAdd() {
 		for(int i = 0; i < iterations; ++i) {
-			concurrentTable.addElement(randomValues[i]);
+			concurrentTable.add(randomValues[i]);
 		}
 	}
 	@Benchmark
 	public void SyncListForwardGetIndex(Blackhole bh) {
 		for(int i = -1, s = syncTable.size(); ++i < s;) {
-			bh.consume(syncTable.getElement(i));
+			bh.consume(syncTable.get(i));
 		}
 	}
 	@Benchmark
 	public void ConcurrentForwardGetIndex(Blackhole bh) {
 		for(int i = -1, s = concurrentTable.size(); ++i < s;) {
-			bh.consume(concurrentTable.getElement(i));
+			bh.consume(concurrentTable.get(i));
 		}
 	}
 	@Benchmark
 	public void SyncListBackwardGetIndex(Blackhole bh) {
 		for(int i = syncTable.size(); --i >= 0;) {
-			bh.consume(syncTable.getElement(i));
+			bh.consume(syncTable.get(i));
 		}
 	}
 	@Benchmark
 	public void ConcurrentBackwardGetIndex(Blackhole bh) {
 		for(int i = concurrentTable.size(); --i >= 0;) {
-			bh.consume(concurrentTable.getElement(i));
+			bh.consume(concurrentTable.get(i));
 		}
 	}
 	@Benchmark
 	public void SyncListBackwardRemoveIndex(Blackhole bh) {
 		for(int i = syncTable.size(); --i >= 0;) {
-			bh.consume(syncTable.removeElement(i));
+			bh.consume(syncTable.remove(i));
 		}
 	}
 	@Benchmark
 	public void ConcurrentBackwardRemoveIndex(Blackhole bh) {
 		for(int i = concurrentTable.size(); --i >= 0;) {
-			bh.consume(concurrentTable.removeElement(i));
+			bh.consume(concurrentTable.remove(i));
 		}
 	}
 	public static void main(String[] args) throws RunnerException {

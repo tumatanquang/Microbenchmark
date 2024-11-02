@@ -19,7 +19,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import uc.util.ConcurrentArrayList;
-import uc.util.SyncArrayList;
+import uc.util.SynchronizedArrayList;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
@@ -28,7 +28,7 @@ import uc.util.SyncArrayList;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkMultiThreadArrayList {
-	public SyncArrayList<Double> syncList;
+	public SynchronizedArrayList<Double> syncList;
 	public ConcurrentArrayList<Double> concurrentList;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
@@ -42,12 +42,12 @@ public class BenchmarkMultiThreadArrayList {
 	}
 	@Setup(Level.Invocation)
 	public void setUpForAdd() {
-		syncList = new SyncArrayList<Double>(iterations).shared();
+		syncList = new SynchronizedArrayList<Double>(iterations).shared();
 		concurrentList = new ConcurrentArrayList<Double>(iterations).shared();
 	}
 	@Setup(Level.Invocation)
 	public void setUpForRemove() {
-		syncList = new SyncArrayList<Double>(iterations).shared();
+		syncList = new SynchronizedArrayList<Double>(iterations).shared();
 		concurrentList = new ConcurrentArrayList<Double>(iterations).shared();
 		for(int i = 0; i < iterations; ++i) {
 			double value = randomValues[i];

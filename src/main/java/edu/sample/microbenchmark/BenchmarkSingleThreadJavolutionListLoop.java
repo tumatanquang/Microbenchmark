@@ -18,12 +18,9 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import hero.player.HeroPlayer;
 import javolution.util.FastList;
 import javolution.util.FastTable;
 import javolution.util.FastList.Node;
-import uc.util.ConcurrentArrayList;
-import uc.util.SyncArrayList;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Thread)
