@@ -12,7 +12,6 @@
 		<javac.target>1.8</javac.target>
 		<uberjar.name>benchmarks</uberjar.name>
 	</properties>
-
 	<profiles>
 		<profile>
 			<id>default</id>
@@ -20,16 +19,16 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
+				<!-- Use javolution 5.6.0_6 as default -->
 				<dependency>
 					<groupId>javolution</groupId>
 					<artifactId>javolution</artifactId>
 					<version>5.6.0_6</version>
 					<scope>system</scope>
-					<systemPath>${project.basedir}/lib/javolution-5.6.0_6.jar</systemPath>
+					<systemPath>${basedir}/lib/javolution-5.6.0_6.jar</systemPath>
 				</dependency>
 			</dependencies>
 		</profile>
-
 		<profile>
 			<id>benchmark5</id>
 			<activation>
@@ -60,7 +59,6 @@
 				</dependency>
 			</dependencies>
 		</profile>
-
 		<profile>
 			<id>benchmark6</id>
 			<activation>
@@ -92,7 +90,6 @@
 			</dependencies>
 		</profile>
 	</profiles>
-
 	<dependencies>
 		<!-- JMH dependencies -->
 		<dependency>
@@ -117,7 +114,6 @@
 			<version>3.1</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
