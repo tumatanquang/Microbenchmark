@@ -1,4 +1,4 @@
-name: JMH Benchmark Single Thread Javolution 5.6.0_6 List In Loop
+name: JMH Benchmark Single Thread Javolution 5.6.1_6 List In Loop
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
 
       - name: Build and run benchmarks
         run: |
-          mvn install:install-file -Dfile=lib/javolution-5.6.0_6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.6.0 -Dpackaging=jar
+          mvn install:install-file -Dfile=lib/javolution-5.6.1_6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.6.1 -Dpackaging=jar
           mvn clean install
 
       - name: Run JMH Benchmarks
