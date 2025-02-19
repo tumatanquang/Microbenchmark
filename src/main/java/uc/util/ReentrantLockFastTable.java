@@ -1,23 +1,24 @@
 package uc.util;
-import java.util.ArrayList;
-import edu.emory.mathcs.backport.java.util.concurrent.locks.ReentrantLock;
-public class ConcurrentArrayList<E> extends ArrayList<E> {
-	private static final long serialVersionUID = -6881913451159539758L;
-	public ConcurrentArrayList() {
+import javolution.util.FastTable;
+import javolution.util.ReentrantLock;
+public class ReentrantLockFastTable<E> extends FastTable<E> {
+	private static final long serialVersionUID = 2781771606854788734L;
+	public ReentrantLockFastTable() {
 		super();
 	}
-	public ConcurrentArrayList(int initialCapacity) {
-		super(initialCapacity);
+	public ReentrantLockFastTable(int capacity) {
+		super(capacity);
 	}
-	public final ConcurrentArrayList<E> shared() {
+	@Override
+	public final ReentrantLockFastTable<E> shared() {
 		return new Shared(this);
 	}
-	private final class Shared extends ConcurrentArrayList<E> {
-		private static final long serialVersionUID = 5903643726292984434L;
-		private final ConcurrentArrayList<E> list;
+	private final class Shared extends ReentrantLockFastTable<E> {
+		private static final long serialVersionUID = 29253114956268253L;
+		private final ReentrantLockFastTable<E> table;
 		private final ReentrantLock rwLock;
-		private Shared(ConcurrentArrayList<E> target) {
-			list = target;
+		private Shared(ReentrantLockFastTable<E> target) {
+			table = target;
 			rwLock = new ReentrantLock();
 		}
 		@Override
@@ -25,7 +26,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.add(value);
+				return table.add(value);
 			}
 			finally {
 				lock.unlock();
@@ -36,7 +37,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				list.clear();
+				table.clear();
 			}
 			finally {
 				lock.unlock();
@@ -47,7 +48,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.contains(o);
+				return table.contains(o);
 			}
 			finally {
 				lock.unlock();
@@ -58,7 +59,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.get(index);
+				return table.get(index);
 			}
 			finally {
 				lock.unlock();
@@ -69,7 +70,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.indexOf(o);
+				return table.indexOf(o);
 			}
 			finally {
 				lock.unlock();
@@ -80,7 +81,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.isEmpty();
+				return table.isEmpty();
 			}
 			finally {
 				lock.unlock();
@@ -91,7 +92,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.remove(index);
+				return table.remove(index);
 			}
 			finally {
 				lock.unlock();
@@ -102,7 +103,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.remove(o);
+				return table.remove(o);
 			}
 			finally {
 				lock.unlock();
@@ -113,7 +114,7 @@ public class ConcurrentArrayList<E> extends ArrayList<E> {
 			final ReentrantLock lock = rwLock;
 			lock.lock();
 			try {
-				return list.size();
+				return table.size();
 			}
 			finally {
 				lock.unlock();

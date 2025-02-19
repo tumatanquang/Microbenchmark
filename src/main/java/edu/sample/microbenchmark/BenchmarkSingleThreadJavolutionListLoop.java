@@ -28,11 +28,11 @@ import javolution.util.FastList.Node;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkSingleThreadJavolutionListLoop {
+	public FastList<Double> fastList;
+	public FastTable<Double> fastTable;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
 	private double[] randomValues;
-	public FastList<Double> fastList;
-	public FastTable<Double> fastTable;
 	@Setup(Level.Trial)
 	public void preloadRandomValues() {
 		randomValues = new double[iterations];
@@ -41,7 +41,7 @@ public class BenchmarkSingleThreadJavolutionListLoop {
 		}
 	}
 	@Setup
-	public void setup() {
+	public void setUpForAdd() {
 		fastList = new FastList<Double>(iterations);
 		fastTable = new FastTable<Double>(iterations);
 		for(int i = 0; i < iterations; ++i) {
