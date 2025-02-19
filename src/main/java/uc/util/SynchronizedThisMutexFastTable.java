@@ -23,55 +23,55 @@ public class SynchronizedThisMutexFastTable<E> extends FastTable<E> {
 		@Override
 		public boolean add(E value) {
 			synchronized(mutex) {
-			return table.add(value);
+				return table.add(value);
 			}
 		}
 		@Override
 		public void clear() {
 			synchronized(mutex) {
-			table.clear();
+				table.clear();
 			}
 		}
 		@Override
 		public boolean contains(Object o) {
 			synchronized(mutex) {
-			return table.contains(o);
+				return table.contains(o);
 			}
 		}
 		@Override
 		public E get(int index) {
 			synchronized(mutex) {
-			return table.get(index);
+				return table.get(index);
 			}
 		}
 		@Override
 		public int indexOf(Object o) {
 			synchronized(mutex) {
-			return table.indexOf(o);
+				return table.indexOf(o);
 			}
 		}
 		@Override
 		public boolean isEmpty() {
 			synchronized(mutex) {
-			return table.isEmpty();
+				return table.isEmpty();
 			}
 		}
 		@Override
 		public E remove(int index) {
 			synchronized(mutex) {
-			return table.remove(index);
+				return table.remove(index);
 			}
 		}
 		@Override
 		public boolean remove(Object o) {
 			synchronized(mutex) {
-			return table.remove(o);
+				return table.remove(o);
 			}
 		}
 		@Override
 		public int size() {
 			synchronized(mutex) {
-			return table.size();
+				return table.size();
 			}
 		}
 	}

@@ -40,15 +40,27 @@ public class BenchmarkMultiThreadThreetenBackport {
 		}
 	}
 	@Benchmark
-	public void ThreeTenBackportInstant(Blackhole bh) {
+	public void ThreeTenBackportClock(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
 			bh.consume(java.time.Clock.systemUTC().millis());
 		}
 	}
 	@Benchmark
-	public void JavaTimeInstance(Blackhole bh) {
+	public void JavaTimeClock(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
 			bh.consume(org.threeten.bp.Clock.systemUTC().millis());
+		}
+	}
+	@Benchmark
+	public void ThreeTenBackportInstant(Blackhole bh) {
+		for(int i = -1; ++i < iterations;) {
+			bh.consume(java.time.Instant.now().toEpochMilli());
+		}
+	}
+	@Benchmark
+	public void JavaTimeInstance(Blackhole bh) {
+		for(int i = -1; ++i < iterations;) {
+			bh.consume(org.threeten.bp.Instant.now().toEpochMilli());
 		}
 	}
 	public static void main(String[] args) throws RunnerException {

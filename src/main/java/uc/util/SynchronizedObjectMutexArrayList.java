@@ -22,55 +22,55 @@ public class SynchronizedObjectMutexArrayList<E> extends ArrayList<E> {
 		@Override
 		public boolean add(E value) {
 			synchronized(mutex) {
-			return list.add(value);
+				return list.add(value);
 			}
 		}
 		@Override
 		public void clear() {
 			synchronized(mutex) {
-			list.clear();
+				list.clear();
 			}
 		}
 		@Override
 		public boolean contains(Object o) {
 			synchronized(mutex) {
-			return list.contains(o);
+				return list.contains(o);
 			}
 		}
 		@Override
 		public E get(int index) {
 			synchronized(mutex) {
-			return list.get(index);
+				return list.get(index);
 			}
 		}
 		@Override
 		public int indexOf(Object o) {
 			synchronized(mutex) {
-			return list.indexOf(o);
+				return list.indexOf(o);
 			}
 		}
 		@Override
 		public boolean isEmpty() {
 			synchronized(mutex) {
-			return list.isEmpty();
+				return list.isEmpty();
 			}
 		}
 		@Override
 		public E remove(int index) {
 			synchronized(mutex) {
-			return list.remove(index);
+				return list.remove(index);
 			}
 		}
 		@Override
 		public boolean remove(Object o) {
 			synchronized(mutex) {
-			return list.remove(o);
+				return list.remove(o);
 			}
 		}
 		@Override
 		public int size() {
 			synchronized(mutex) {
-			return list.size();
+				return list.size();
 			}
 		}
 	}

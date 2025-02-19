@@ -47,7 +47,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncThis")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncThisAdd() {
 		for(int i = 0; i < iterations; ++i) {
 			syncThisList.add(randomValues[i]);
@@ -55,7 +55,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncObject")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncObjectAdd() {
 		for(int i = 0; i < iterations; ++i) {
 			syncObjectList.add(randomValues[i]);
@@ -63,7 +63,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("reentrantLock")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void ReentrantLockListAdd() {
 		for(int i = 0; i < iterations; ++i) {
 			concurrentList.add(randomValues[i]);
@@ -71,7 +71,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncThis")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncThisForwardGetIndex(Blackhole bh) {
 		for(int i = -1, s = syncThisList.size(); ++i < s;) {
 			bh.consume(syncThisList.get(i));
@@ -79,7 +79,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncObject")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncObjectForwardGetIndex(Blackhole bh) {
 		for(int i = -1, s = syncObjectList.size(); ++i < s;) {
 			bh.consume(syncObjectList.get(i));
@@ -87,7 +87,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("reentrantLock")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void ReentrantLockForwardGetIndex(Blackhole bh) {
 		for(int i = -1, s = concurrentList.size(); ++i < s;) {
 			bh.consume(concurrentList.get(i));
@@ -95,7 +95,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncThis")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncThisBackwardGetIndex(Blackhole bh) {
 		for(int i = syncThisList.size(); --i >= 0;) {
 			bh.consume(syncThisList.get(i));
@@ -103,7 +103,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncObject")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncObjectBackwardGetIndex(Blackhole bh) {
 		for(int i = syncObjectList.size(); --i >= 0;) {
 			bh.consume(syncObjectList.get(i));
@@ -111,7 +111,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("reentrantLock")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void ReentrantLockBackwardGetIndex(Blackhole bh) {
 		for(int i = concurrentList.size(); --i >= 0;) {
 			bh.consume(concurrentList.get(i));
@@ -119,7 +119,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncThis")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncThisBackwardRemoveIndex(Blackhole bh) {
 		for(int i = syncThisList.size(); --i >= 0;) {
 			bh.consume(syncThisList.remove(i));
@@ -127,7 +127,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("syncObject")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void SyncObjectBackwardRemoveIndex(Blackhole bh) {
 		for(int i = syncObjectList.size(); --i >= 0;) {
 			bh.consume(syncObjectList.remove(i));
@@ -135,7 +135,7 @@ public class BenchmarkSingleThreadArrayList {
 	}
 	@Benchmark
 	@Group("reentrantLock")
-    @GroupThreads(1)
+	@GroupThreads(1)
 	public void ReentrantLockBackwardRemoveIndex(Blackhole bh) {
 		for(int i = concurrentList.size(); --i >= 0;) {
 			bh.consume(concurrentList.remove(i));
