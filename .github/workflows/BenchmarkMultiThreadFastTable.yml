@@ -1,4 +1,4 @@
-name: 【Multi-threaded】 Benchmark thread-safe FastTable
+name: 【Multi-threaded】 Benchmark thread-safe FastTable using Javolution backport
 
 on:
   push:
