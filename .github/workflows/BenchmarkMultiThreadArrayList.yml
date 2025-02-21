@@ -1,4 +1,4 @@
-name: JMH Benchmark Multi Thread ArrayList
+name: 【Multi-threaded】 Benchmark thread-safe ArrayList
 
 on:
   push:

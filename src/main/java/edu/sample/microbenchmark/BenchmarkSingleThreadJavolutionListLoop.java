@@ -19,7 +19,8 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import javolution.util.FastList;
-import javolution.util.FastList.Node;
+import javolution.util.FastSequence;
+import javolution.util.FastSequence.Node;
 import javolution.util.FastTable;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -42,7 +43,7 @@ public class BenchmarkSingleThreadJavolutionListLoop {
 	}
 	@Setup
 	public void setUpForAdd() {
-		fastList = new FastList<Double>(iterations);
+		fastList = new FastSequence<Double>(iterations);
 		fastTable = new FastTable<Double>(iterations);
 		for(int i = 0; i < iterations; ++i) {
 			double value = randomValues[i];

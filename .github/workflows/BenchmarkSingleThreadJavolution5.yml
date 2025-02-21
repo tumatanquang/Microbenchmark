@@ -1,4 +1,4 @@
-name: JMH Benchmark Single Thread Javolution 5
+name: 【Single-threaded】 Benchmark ArrayList vs FastList vs FastTable using Javolution 5
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: JMH Benchmark Single Thread Javolution 5.6.0_6 List In Loop
+name: 【Single-threaded】 Benchmark FastChain vs FastTable using Javolution backport
 
 on:
   push:

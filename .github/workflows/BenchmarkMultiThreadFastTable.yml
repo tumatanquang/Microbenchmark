@@ -1,4 +1,4 @@
-name: JMH Benchmark Multi Thread FastTable
+name: 【Multi-threaded】 Benchmark thread-safe FastTable
 
 on:
   push:
