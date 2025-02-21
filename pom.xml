@@ -19,13 +19,13 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
-				<!-- Use javolution 5.6.5_6 as default -->
+				<!-- Use javolution 5.6.7_6 as default -->
 				<dependency>
 					<groupId>javolution</groupId>
 					<artifactId>javolution</artifactId>
 					<version>5.6.4</version>
 					<scope>system</scope>
-					<systemPath>${pom.basedir}/lib/javolution-5.6.5_6.jar</systemPath>
+					<systemPath>${pom.basedir}/lib/javolution-5.6.7_6.jar</systemPath>
 				</dependency>
 			</dependencies>
 		</profile>

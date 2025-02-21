@@ -9,9 +9,9 @@ public class SynchronizedObjectMutexArrayList<E> extends ArrayList<E> {
 		super(initialCapacity);
 	}
 	public final SynchronizedObjectMutexArrayList<E> shared() {
-		return new Shared(this);
+		return new Shared<E>(this);
 	}
-	private final class Shared extends SynchronizedObjectMutexArrayList<E> {
+	private static final class Shared<E> extends SynchronizedObjectMutexArrayList<E> {
 		private static final long serialVersionUID = 7851444873602708266L;
 		private final SynchronizedObjectMutexArrayList<E> list;
 		private final Object mutex;

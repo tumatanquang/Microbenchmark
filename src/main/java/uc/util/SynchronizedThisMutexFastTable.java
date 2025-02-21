@@ -10,9 +10,9 @@ public class SynchronizedThisMutexFastTable<E> extends FastTable<E> {
 	}
 	@Override
 	public final SynchronizedThisMutexFastTable<E> shared() {
-		return new Shared(this);
+		return new Shared<E>(this);
 	}
-	private class Shared extends SynchronizedThisMutexFastTable<E> {
+	private static final class Shared<E> extends SynchronizedThisMutexFastTable<E> {
 		private static final long serialVersionUID = -6167239388106998276L;
 		private final SynchronizedThisMutexFastTable<E> table;
 		private final Object mutex;

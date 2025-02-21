@@ -11,9 +11,9 @@ public class ReentrantLockFastTable<E> extends FastTable<E> {
 	}
 	@Override
 	public final ReentrantLockFastTable<E> shared() {
-		return new Shared(this);
+		return new Shared<E>(this);
 	}
-	private final class Shared extends ReentrantLockFastTable<E> {
+	private static final class Shared<E> extends ReentrantLockFastTable<E> {
 		private static final long serialVersionUID = 29253114956268253L;
 		private final ReentrantLockFastTable<E> table;
 		private final ReentrantLock rwLock;

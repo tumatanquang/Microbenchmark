@@ -1,6 +1,6 @@
 package uc.util;
 import java.util.ArrayList;
-import edu.emory.mathcs.backport.java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantLock;
 public class ReentrantLockArrayList<E> extends ArrayList<E> {
 	private static final long serialVersionUID = -6881913451159539758L;
 	public ReentrantLockArrayList() {
@@ -10,9 +10,9 @@ public class ReentrantLockArrayList<E> extends ArrayList<E> {
 		super(initialCapacity);
 	}
 	public final ReentrantLockArrayList<E> shared() {
-		return new Shared(this);
+		return new Shared<E>(this);
 	}
-	private final class Shared extends ReentrantLockArrayList<E> {
+	private static final class Shared<E> extends ReentrantLockArrayList<E> {
 		private static final long serialVersionUID = 5903643726292984434L;
 		private final ReentrantLockArrayList<E> list;
 		private final ReentrantLock rwLock;
