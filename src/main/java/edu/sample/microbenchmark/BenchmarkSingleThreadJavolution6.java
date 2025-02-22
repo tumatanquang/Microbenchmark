@@ -31,22 +31,13 @@ public class BenchmarkSingleThreadJavolution6 {
 	public FastTable<Double> fastTable;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
-	private double[] randomValues;
-	@Setup(Level.Trial)
-	public void preloadRandomValues() {
-		randomValues = new double[iterations];
-		for(int i = 0; i < iterations; ++i) {
-			randomValues[i] = Math.random();
-		}
-	}
-	@Setup(Level.Invocation)
-	public void setUp() {
+	@Setup(Level.Iteration)
+	public void setup() {
 		arrayList = new ArrayList<Double>(iterations);
 		fastTable = new FastTable<Double>();
 		for(int i = 0; i < iterations; ++i) {
-			double value = randomValues[i];
-			arrayList.add(value);
-			fastTable.add(value);
+			arrayList.add(Math.random());
+			fastTable.add(Math.random());
 		}
 	}
 	@Benchmark

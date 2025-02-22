@@ -39,7 +39,7 @@ public class BenchmarkMultiThreadMersenneTwister {
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
 	@Setup(Level.Invocation)
-	public void setUp() {
+	public void setup() {
 		MT_RAND = new MersenneTwister();
 		MT_SRAND = new MersenneTwister();
 		MTF_RAND = new MersenneTwisterFast();

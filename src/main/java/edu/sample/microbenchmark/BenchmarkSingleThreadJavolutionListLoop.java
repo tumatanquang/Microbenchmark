@@ -32,22 +32,13 @@ public class BenchmarkSingleThreadJavolutionListLoop {
 	public FastTable<Double> fastTable;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
-	private double[] randomValues;
-	@Setup(Level.Trial)
-	public void preloadRandomValues() {
-		randomValues = new double[iterations];
-		for(int i = -1; ++i < iterations;) {
-			randomValues[i] = Math.random();
-		}
-	}
-	@Setup
-	public void setUpForAdd() {
+	@Setup(Level.Iteration)
+	public void setup() {
 		fastList = new FastSequence<Double>(iterations);
 		fastTable = new FastTable<Double>(iterations);
 		for(int i = 0; i < iterations; ++i) {
-			double value = randomValues[i];
-			fastList.add(value);
-			fastTable.add(value);
+			fastList.add(Math.random());
+			fastTable.add(Math.random());
 		}
 	}
 	@Benchmark

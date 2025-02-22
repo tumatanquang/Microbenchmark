@@ -36,7 +36,7 @@ public class BenchmarkSingleThreadArrayList {
 	public int iterations;
 	private double[] randomValues;
 	@Setup(Level.Iteration)
-	public void setUp() {
+	public void setup() {
 		randomValues = new double[iterations];
 		for(int i = 0; i < iterations; ++i) {
 			randomValues[i] = Math.random();

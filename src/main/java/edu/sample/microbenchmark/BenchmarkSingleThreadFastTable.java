@@ -38,12 +38,12 @@ public class BenchmarkSingleThreadFastTable {
 	public int iterations;
 	private double[] randomValues;
 	@Setup(Level.Iteration)
-	public void setUp() {
+	public void setup() {
 		randomValues = new double[iterations];
 		for(int i = 0; i < iterations; ++i) {
 			randomValues[i] = Math.random();
 		}
-		rwFastTable = new FastTable<Double>().shared();
+		rwFastTable = new FastTable<Double>(iterations).shared();
 		syncThisTable = new SynchronizedThisMutexFastTable<Double>(iterations).shared();
 		syncObjectTable = new SynchronizedObjectMutexFastTable<Double>(iterations).shared();
 		concurrentTable = new ReentrantLockFastTable<Double>(iterations).shared();
