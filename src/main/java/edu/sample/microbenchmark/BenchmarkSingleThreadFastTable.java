@@ -36,7 +36,7 @@ public class BenchmarkSingleThreadFastTable {
 	public ReentrantLockFastTable<Double> concurrentTable;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
-	private double[] randomValues;
+	public double[] randomValues;
 	@Setup(Level.Iteration)
 	public void setup() {
 		randomValues = new double[iterations];
