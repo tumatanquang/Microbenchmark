@@ -1,21 +1,21 @@
 package uc.util;
 import java.util.ArrayList;
-public class SynchronizedThisMutexArrayList<E> extends ArrayList<E> {
+public class SynchronizedThisArrayList<E> extends ArrayList<E> {
 	private static final long serialVersionUID = -5895597026413583152L;
-	public SynchronizedThisMutexArrayList() {
+	public SynchronizedThisArrayList() {
 		super();
 	}
-	public SynchronizedThisMutexArrayList(int initialCapacity) {
+	public SynchronizedThisArrayList(int initialCapacity) {
 		super(initialCapacity);
 	}
-	public final SynchronizedThisMutexArrayList<E> shared() {
+	public final SynchronizedThisArrayList<E> shared() {
 		return new Shared<E>(this);
 	}
-	private static final class Shared<E> extends SynchronizedThisMutexArrayList<E> {
+	private static final class Shared<E> extends SynchronizedThisArrayList<E> {
 		private static final long serialVersionUID = 7851444873602708266L;
-		private final SynchronizedThisMutexArrayList<E> list;
+		private final SynchronizedThisArrayList<E> list;
 		private final Object mutex;
-		private Shared(SynchronizedThisMutexArrayList<E> target) {
+		private Shared(SynchronizedThisArrayList<E> target) {
 			list = target;
 			mutex = this;
 		}

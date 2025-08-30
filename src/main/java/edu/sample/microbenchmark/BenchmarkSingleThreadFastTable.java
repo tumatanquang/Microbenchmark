@@ -19,10 +19,12 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import javolution.util.FastTable;
+import uc.util.BackportReentrantLockFastTable;
+import uc.util.BackportReentrantReadWriteLockFastTable;
 import uc.util.ReentrantLockFastTable;
-import uc.util.SynchronizedObjectMutexFastTable;
-import uc.util.SynchronizedThisMutexFastTable;
+import uc.util.ReentrantReadWriteLockFastTable;
+import uc.util.SynchronizedObjectFastTable;
+import uc.util.SynchronizedThisFastTable;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Group)
@@ -30,10 +32,12 @@ import uc.util.SynchronizedThisMutexFastTable;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkSingleThreadFastTable {
-	public FastTable<Double> rwFastTable;
-	public SynchronizedThisMutexFastTable<Double> syncThisTable;
-	public SynchronizedObjectMutexFastTable<Double> syncObjectTable;
-	public ReentrantLockFastTable<Double> concurrentTable;
+	public BackportReentrantLockFastTable<Double> brlTable;
+	public BackportReentrantReadWriteLockFastTable<Double> brwlTable;
+	public ReentrantLockFastTable<Double> lockTable;
+	public ReentrantReadWriteLockFastTable<Double> rwlTable;
+	public SynchronizedObjectFastTable<Double> syncObjectTable;
+	public SynchronizedThisFastTable<Double> syncThisTable;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
 	public double[] randomValues;
@@ -43,137 +47,155 @@ public class BenchmarkSingleThreadFastTable {
 		for(int i = 0; i < iterations; ++i) {
 			randomValues[i] = Math.random();
 		}
-		rwFastTable = new FastTable<Double>(iterations).shared();
-		syncThisTable = new SynchronizedThisMutexFastTable<Double>(iterations).shared();
-		syncObjectTable = new SynchronizedObjectMutexFastTable<Double>(iterations).shared();
-		concurrentTable = new ReentrantLockFastTable<Double>(iterations).shared();
+		brlTable = new BackportReentrantLockFastTable<Double>().shared();
+		brwlTable = new BackportReentrantReadWriteLockFastTable<Double>().shared();
+		lockTable = new ReentrantLockFastTable<Double>().shared();
+		rwlTable = new ReentrantReadWriteLockFastTable<Double>().shared();
+		syncObjectTable = new SynchronizedObjectFastTable<Double>().shared();
+		syncThisTable = new SynchronizedThisFastTable<Double>().shared();
 	}
 	@Benchmark
-	@Group("readWrite")
+	@Group("BackportLock")
+	@GroupThreads(1)
+	public void BackportLockAdd() {
+		for(int i = 0; i < iterations; ++i) {
+			brlTable.add(randomValues[i]);
+		}
+	}
+	@Benchmark
+	@Group("BackportReadWrite")
 	@GroupThreads(1)
 	public void ReadWriteAdd() {
 		for(int i = 0; i < iterations; ++i) {
-			rwFastTable.add(randomValues[i]);
+			brwlTable.add(randomValues[i]);
 		}
 	}
 	@Benchmark
-	@Group("syncThis")
+	@Group("InternalLock")
 	@GroupThreads(1)
-	public void SyncThisAdd() {
+	public void InternalLockAdd() {
 		for(int i = 0; i < iterations; ++i) {
-			syncThisTable.add(randomValues[i]);
+			lockTable.add(randomValues[i]);
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("InternalReadWrite")
 	@GroupThreads(1)
-	public void SyncObjectAdd() {
+	public void InternalReadWriteAdd() {
+		for(int i = 0; i < iterations; ++i) {
+			lockTable.add(randomValues[i]);
+		}
+	}
+	@Benchmark
+	@Group("SynchronizedObject")
+	@GroupThreads(1)
+	public void SynchronizedObjectAdd() {
 		for(int i = 0; i < iterations; ++i) {
 			syncObjectTable.add(randomValues[i]);
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("SynchronizedThis")
 	@GroupThreads(1)
-	public void ReentrantLockAdd() {
+	public void SynchronizedThisAdd() {
 		for(int i = 0; i < iterations; ++i) {
-			concurrentTable.add(randomValues[i]);
+			syncThisTable.add(randomValues[i]);
 		}
 	}
 	@Benchmark
-	@Group("readWrite")
+	@Group("BackportLock")
 	@GroupThreads(1)
-	public void ReadWriteForwardGetIndex(Blackhole bh) {
-		for(int i = -1, s = rwFastTable.size(); ++i < s;) {
-			bh.consume(rwFastTable.get(i));
+	public void BackportLockGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(brlTable.get(i));
 		}
 	}
 	@Benchmark
-	@Group("syncThis")
+	@Group("BackportReadWrite")
 	@GroupThreads(1)
-	public void SyncThisForwardGetIndex(Blackhole bh) {
-		for(int i = -1, s = syncThisTable.size(); ++i < s;) {
-			bh.consume(syncThisTable.get(i));
+	public void ReadWriteGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(brwlTable.get(i));
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("InternalLock")
 	@GroupThreads(1)
-	public void SyncObjectForwardGetIndex(Blackhole bh) {
-		for(int i = -1, s = syncObjectTable.size(); ++i < s;) {
+	public void InternalLockGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(lockTable.get(i));
+		}
+	}
+	@Benchmark
+	@Group("InternalReadWrite")
+	@GroupThreads(1)
+	public void InternalReadWriteGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(lockTable.get(i));
+		}
+	}
+	@Benchmark
+	@Group("SynchronizedObject")
+	@GroupThreads(1)
+	public void SynchronizedObjectGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
 			bh.consume(syncObjectTable.get(i));
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("SynchronizedThis")
 	@GroupThreads(1)
-	public void ReentrantLockForwardGetIndex(Blackhole bh) {
-		for(int i = -1, s = concurrentTable.size(); ++i < s;) {
-			bh.consume(concurrentTable.get(i));
-		}
-	}
-	@Benchmark
-	@Group("readWrite")
-	@GroupThreads(1)
-	public void ReadWriteBackwardGetIndex(Blackhole bh) {
-		for(int i = rwFastTable.size(); --i >= 0;) {
-			bh.consume(rwFastTable.get(i));
-		}
-	}
-	@Benchmark
-	@Group("syncThis")
-	@GroupThreads(1)
-	public void SyncThisBackwardGetIndex(Blackhole bh) {
-		for(int i = syncThisTable.size(); --i >= 0;) {
+	public void SynchronizedThisGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
 			bh.consume(syncThisTable.get(i));
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("BackportLock")
 	@GroupThreads(1)
-	public void SyncObjectBackwardGetIndex(Blackhole bh) {
-		for(int i = syncObjectTable.size(); --i >= 0;) {
-			bh.consume(syncObjectTable.get(i));
+	public void BackportLockRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(brlTable.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("BackportReadWrite")
 	@GroupThreads(1)
-	public void ReentrantLockBackwardGetIndex(Blackhole bh) {
-		for(int i = concurrentTable.size(); --i >= 0;) {
-			bh.consume(concurrentTable.get(i));
+	public void ReadWriteRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(brwlTable.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("readWrite")
+	@Group("InternalLock")
 	@GroupThreads(1)
-	public void ReadWriteBackwardRemoveIndex(Blackhole bh) {
-		for(int i = rwFastTable.size(); --i >= 0;) {
-			bh.consume(rwFastTable.remove(i));
+	public void InternalLockRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(lockTable.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("syncThis")
+	@Group("InternalReadWrite")
 	@GroupThreads(1)
-	public void SyncThisBackwardRemoveIndex(Blackhole bh) {
-		for(int i = syncThisTable.size(); --i >= 0;) {
-			bh.consume(syncThisTable.remove(i));
+	public void InternalReadWriteRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(lockTable.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("SynchronizedObject")
 	@GroupThreads(1)
-	public void SyncObjectBackwardRemoveIndex(Blackhole bh) {
-		for(int i = syncObjectTable.size(); --i >= 0;) {
+	public void SynchronizedObjectRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
 			bh.consume(syncObjectTable.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("SynchronizedThis")
 	@GroupThreads(1)
-	public void ReentrantLockBackwardRemoveIndex(Blackhole bh) {
-		for(int i = concurrentTable.size(); --i >= 0;) {
-			bh.consume(concurrentTable.remove(i));
+	public void SynchronizedThisRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(syncThisTable.remove(i));
 		}
 	}
 	public static void main(String[] args) throws RunnerException {

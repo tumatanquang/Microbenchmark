@@ -18,8 +18,8 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import javolution.util.FastSequence;
-import javolution.util.FastSequence.Node;
+import javolution.util.FastList;
+import javolution.util.FastList.Node;
 import javolution.util.FastTable;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -28,13 +28,13 @@ import javolution.util.FastTable;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkSingleThreadJavolutionListLoop {
-	public FastSequence<Double> fastList;
+	public FastList<Double> fastList;
 	public FastTable<Double> fastTable;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
 	@Setup(Level.Iteration)
 	public void setup() {
-		fastList = new FastSequence<Double>(iterations);
+		fastList = new FastList<Double>(iterations);
 		fastTable = new FastTable<Double>(iterations);
 		for(int i = 0; i < iterations; ++i) {
 			fastList.add(Math.random());

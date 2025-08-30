@@ -1,38 +1,42 @@
 package ec.util;
+import java.io.Serializable;
 /**
  * https://cs.gmu.edu/~sean/research/mersenne/MersenneTwisterFast.java
  * @author Sean Luke
  */
-public strictfp final class MersenneTwisterFast {
-	private static final int UPPER_MASK = Integer.MIN_VALUE;
-	private static final int LOWER_MASK = Integer.MAX_VALUE;
-	private static final int SEED_MASK = -1;
+public strictfp final class MersenneTwisterFast implements Serializable {
+	private static final long serialVersionUID = -8219700664442619525L;
+	private static final long SEED_XOR = 0x5DEECE66DL;
+	private static final long SEED_AND = 0xFFFFFFFFFFFFL;
+	private static final int SEED_MASK = 0xFFFFFFFF;
+	private static final int UPPER_MASK = 0x80000000;
+	private static final int LOWER_MASK = 0x7FFFFFFF;
 	private static final int N = 624;
 	private static final int M = 397;
-	private static final int[] MAGIC = {0, -1727483681};
-	private static final int MAGIC_FACTOR_A = 1812433253;
-	private static final int MAGIC_FACTOR_B = 1664525;
-	private static final int MAGIC_FACTOR_C = 1566083941;
-	private static final int MAGIC_FACTOR_D = 30;
-	private static final int MAGIC_FACTOR_E = 31;
-	private static final int MAGIC_FACTOR_F = 11;
-	private static final int MAGIC_FACTOR_G = 18;
-	private static final int MAGIC_FACTOR_H = 16;
-	private static final int MAGIC_MASK_A = -1658038656;
-	private static final int MAGIC_MASK_B = -272236544;
-	private static final int MAGIC_MASK_C = 1;
-	private static final int MAGIC_MASK_D = 32;
-	private static final int MAGIC_MASK_E = 53;
-	private static final int MAGIC_MASK_F = 7;
-	private static final int MAGIC_MASK_G = 15;
-	private static final int MAGIC_MASK_H = 24;
-	private static final int MAGIC_SEED = 19650218;
+	private static final int[] MAGIC = {0x0, 0x9908B0DF};
+	private static final int MAGIC_FACTOR_A = 0x6C078965;
+	private static final int MAGIC_FACTOR_B = 0x19660D;
+	private static final int MAGIC_FACTOR_C = 0x5D588B65;
+	private static final int MAGIC_FACTOR_D = 0x1E;
+	private static final int MAGIC_FACTOR_E = 0x1F;
+	private static final int MAGIC_FACTOR_F = 0xB;
+	private static final int MAGIC_FACTOR_G = 0x12;
+	private static final int MAGIC_FACTOR_H = 0x10;
+	private static final int MAGIC_MASK_A = 0x9D2C5680;
+	private static final int MAGIC_MASK_B = 0xEFC60000;
+	private static final int MAGIC_MASK_C = 0x1;
+	private static final int MAGIC_MASK_D = 0x20;
+	private static final int MAGIC_MASK_E = 0x35;
+	private static final int MAGIC_MASK_F = 0x7;
+	private static final int MAGIC_MASK_G = 0xF;
+	private static final int MAGIC_MASK_H = 0x18;
+	private static final int MAGIC_SEED = 0x12BD6AA;
 	private int[] mtn;
 	private int mti;
 	private double __nextNextGaussian;
 	private boolean __haveNextNextGaussian;
 	public MersenneTwisterFast() {
-		this(System.currentTimeMillis());
+		this((System.currentTimeMillis() ^ SEED_XOR) & SEED_AND);
 	}
 	public MersenneTwisterFast(long seed) {
 		setSeed(seed);
@@ -173,8 +177,8 @@ public strictfp final class MersenneTwisterFast {
 	}
 	public boolean nextBoolean(float probability) {
 		if(probability == 0) return false;
-		else if(probability == 1) return true;
-		else if(probability < 0 || probability > 1) throw new IllegalArgumentException("probability must be between 0.0 and 1.0 inclusive.");
+		if(probability == 1) return true;
+		if(probability < 0 || probability > 1) throw new IllegalArgumentException("probability must be between 0.0 and 1.0 inclusive.");
 		final int[] mt = mtn;
 		int y;
 		if(mti >= N) {
@@ -200,8 +204,8 @@ public strictfp final class MersenneTwisterFast {
 	}
 	public boolean nextBoolean(double probability) {
 		if(probability == 0) return false;
-		else if(probability == 1) return true;
-		else if(probability < 0 || probability > 1) throw new IllegalArgumentException("probability must be between 0.0 and 1.0 inclusive.");
+		if(probability == 1) return true;
+		if(probability < 0 || probability > 1) throw new IllegalArgumentException("probability must be between 0.0 and 1.0 inclusive.");
 		final int[] mt = mtn;
 		int y, z;
 		if(mti >= N) {

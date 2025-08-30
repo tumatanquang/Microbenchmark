@@ -1,23 +1,23 @@
 package uc.util;
 import java.util.ArrayList;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-public class ReentrantLockArrayList<E> extends ArrayList<E> {
+import edu.emory.mathcs.backport.java.util.concurrent.locks.Lock;
+import edu.emory.mathcs.backport.java.util.concurrent.locks.ReentrantLock;
+public class BackportReentrantLockArrayList<E> extends ArrayList<E> {
 	private static final long serialVersionUID = -6881913451159539758L;
-	public ReentrantLockArrayList() {
+	public BackportReentrantLockArrayList() {
 		super();
 	}
-	public ReentrantLockArrayList(int initialCapacity) {
+	public BackportReentrantLockArrayList(int initialCapacity) {
 		super(initialCapacity);
 	}
-	public final ReentrantLockArrayList<E> shared() {
+	public final BackportReentrantLockArrayList<E> shared() {
 		return new Shared<E>(this);
 	}
-	private static final class Shared<E> extends ReentrantLockArrayList<E> {
+	private static final class Shared<E> extends BackportReentrantLockArrayList<E> {
 		private static final long serialVersionUID = 5903643726292984434L;
-		private final ReentrantLockArrayList<E> list;
+		private final BackportReentrantLockArrayList<E> list;
 		private final Lock rwLock;
-		private Shared(ReentrantLockArrayList<E> target) {
+		private Shared(BackportReentrantLockArrayList<E> target) {
 			list = target;
 			rwLock = new ReentrantLock();
 		}

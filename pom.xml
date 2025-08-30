@@ -19,16 +19,15 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
-				<!-- Use javolution 5.6.8_6 as default -->
 				<dependency>
 					<groupId>javolution</groupId>
 					<artifactId>javolution</artifactId>
-					<version>5.6.8</version>
+					<version>5.6.9</version>
 					<scope>system</scope>
-					<systemPath>${pom.basedir}/lib/javolution-5.6.8_6.jar</systemPath>
+					<systemPath>${pom.basedir}/lib/javolution-5.6.9_6.jar</systemPath>
 				</dependency>
 			</dependencies>
-			<build>
+			<!--build>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -41,9 +40,9 @@
 						</configuration>
 					</plugin>
 				</plugins>
-			</build>
+			</build-->
 		</profile>
-		<profile>
+		<!--profile>
 			<id>benchmark5</id>
 			<activation>
 				<property>
@@ -65,44 +64,13 @@
 				</plugins>
 			</build>
 			<dependencies>
-				<!-- Use javolution 5.5.1 for BenchmarkJavaJavolution5 -->
 				<dependency>
 					<groupId>javolution</groupId>
 					<artifactId>javolution</artifactId>
 					<version>5.5.1</version>
 				</dependency>
 			</dependencies>
-		</profile>
-		<profile>
-			<id>benchmark6</id>
-			<activation>
-				<property>
-					<name>benchmark</name>
-					<value>6</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<includes>
-								<include>**/BenchmarkSingleThreadJavolution6.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-			<dependencies>
-				<!-- Use javolution-core-java 6.0.0 for BenchmarkJavaJavolution6 -->
-				<dependency>
-					<groupId>org.javolution</groupId>
-					<artifactId>javolution-core-java</artifactId>
-					<version>6.0.0</version>
-				</dependency>
-			</dependencies>
-		</profile>
+		</profile-->
 	</profiles>
 	<dependencies>
 		<!-- JMH dependencies -->
@@ -120,7 +88,7 @@
 		<dependency>
 			<groupId>org.threeten</groupId>
 			<artifactId>threetenbp</artifactId>
-			<version>1.7.0</version>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>backport-util-concurrent</groupId>

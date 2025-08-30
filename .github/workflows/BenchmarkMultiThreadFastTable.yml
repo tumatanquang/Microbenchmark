@@ -37,7 +37,7 @@ jobs:
 
       - name: Build JMH benchmarks
         run: |
-          mvn install:install-file -Dfile=lib/javolution-5.6.8_6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.6.8 -Dpackaging=jar
+          mvn install:install-file -Dfile=lib/javolution-5.6.9_6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.6.9 -Dpackaging=jar
           mvn clean install
 
       - name: Run JMH Benchmarks

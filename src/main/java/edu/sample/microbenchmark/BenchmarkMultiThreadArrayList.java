@@ -13,27 +13,31 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Threads;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import uc.util.BackportReentrantLockArrayList;
+import uc.util.BackportReentrantReadWriteLockArrayList;
 import uc.util.ReentrantLockArrayList;
-import uc.util.SynchronizedObjectMutexArrayList;
-import uc.util.SynchronizedThisMutexArrayList;
+import uc.util.ReentrantReadWriteLockArrayList;
+import uc.util.SynchronizedObjectArrayList;
+import uc.util.SynchronizedThisArrayList;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Group)
-@Threads(Threads.MAX)
 @Fork(1)
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkMultiThreadArrayList {
-	public SynchronizedThisMutexArrayList<Double> syncThisList;
-	public SynchronizedObjectMutexArrayList<Double> syncObjectList;
-	public ReentrantLockArrayList<Double> concurrentList;
+	public BackportReentrantLockArrayList<Double> brlList;
+	public BackportReentrantReadWriteLockArrayList<Double> brwlList;
+	public ReentrantLockArrayList<Double> lockList;
+	public ReentrantReadWriteLockArrayList<Double> rwlList;
+	public SynchronizedObjectArrayList<Double> syncObjectList;
+	public SynchronizedThisArrayList<Double> syncThisList;
 	@Param({"1000", "10000", "100000", "1000000"})
 	public int iterations;
 	public double[] randomValues;
@@ -43,104 +47,155 @@ public class BenchmarkMultiThreadArrayList {
 		for(int i = 0; i < iterations; ++i) {
 			randomValues[i] = Math.random();
 		}
-		syncThisList = new SynchronizedThisMutexArrayList<Double>(iterations).shared();
-		syncObjectList = new SynchronizedObjectMutexArrayList<Double>(iterations).shared();
-		concurrentList = new ReentrantLockArrayList<Double>(iterations).shared();
+		brlList = new BackportReentrantLockArrayList<Double>().shared();
+		brwlList = new BackportReentrantReadWriteLockArrayList<Double>().shared();
+		lockList = new ReentrantLockArrayList<Double>().shared();
+		rwlList = new ReentrantReadWriteLockArrayList<Double>().shared();
+		syncObjectList = new SynchronizedObjectArrayList<Double>().shared();
+		syncThisList = new SynchronizedThisArrayList<Double>().shared();
 	}
 	@Benchmark
-	@Group("syncThis")
+	@Group("BackportLock")
 	@GroupThreads(2)
-	public void SyncThisAdd() {
+	public void BackportLockAdd() {
 		for(int i = 0; i < iterations; ++i) {
-			syncThisList.add(randomValues[i]);
+			brlList.add(randomValues[i]);
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("BackportReadWrite")
 	@GroupThreads(2)
-	public void SyncObjectAdd() {
+	public void ReadWriteAdd() {
+		for(int i = 0; i < iterations; ++i) {
+			brwlList.add(randomValues[i]);
+		}
+	}
+	@Benchmark
+	@Group("InternalLock")
+	@GroupThreads(2)
+	public void InternalLockAdd() {
+		for(int i = 0; i < iterations; ++i) {
+			lockList.add(randomValues[i]);
+		}
+	}
+	@Benchmark
+	@Group("InternalReadWrite")
+	@GroupThreads(2)
+	public void InternalReadWriteAdd() {
+		for(int i = 0; i < iterations; ++i) {
+			lockList.add(randomValues[i]);
+		}
+	}
+	@Benchmark
+	@Group("SynchronizedObject")
+	@GroupThreads(2)
+	public void SynchronizedObjectAdd() {
 		for(int i = 0; i < iterations; ++i) {
 			syncObjectList.add(randomValues[i]);
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("SynchronizedThis")
 	@GroupThreads(2)
-	public void ReentrantLockListAdd() {
+	public void SynchronizedThisAdd() {
 		for(int i = 0; i < iterations; ++i) {
-			concurrentList.add(randomValues[i]);
+			syncThisList.add(randomValues[i]);
 		}
 	}
 	@Benchmark
-	@Group("syncThis")
+	@Group("BackportLock")
 	@GroupThreads(2)
-	public void SyncThisForwardGetIndex(Blackhole bh) {
-		for(int i = -1, s = syncThisList.size(); ++i < s;) {
-			bh.consume(syncThisList.get(i));
+	public void BackportLockGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(brlList.get(i));
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("BackportReadWrite")
 	@GroupThreads(2)
-	public void SyncObjectForwardGetIndex(Blackhole bh) {
-		for(int i = -1, s = syncObjectList.size(); ++i < s;) {
+	public void ReadWriteGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(brwlList.get(i));
+		}
+	}
+	@Benchmark
+	@Group("InternalLock")
+	@GroupThreads(2)
+	public void InternalLockGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(lockList.get(i));
+		}
+	}
+	@Benchmark
+	@Group("InternalReadWrite")
+	@GroupThreads(2)
+	public void InternalReadWriteGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(lockList.get(i));
+		}
+	}
+	@Benchmark
+	@Group("SynchronizedObject")
+	@GroupThreads(2)
+	public void SynchronizedObjectGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
 			bh.consume(syncObjectList.get(i));
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("SynchronizedThis")
 	@GroupThreads(2)
-	public void ReentrantLockForwardGetIndex(Blackhole bh) {
-		for(int i = -1, s = concurrentList.size(); ++i < s;) {
-			bh.consume(concurrentList.get(i));
-		}
-	}
-	@Benchmark
-	@Group("syncThis")
-	@GroupThreads(2)
-	public void SyncThisBackwardGetIndex(Blackhole bh) {
-		for(int i = syncThisList.size(); --i >= 0;) {
+	public void SynchronizedThisGet(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
 			bh.consume(syncThisList.get(i));
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("BackportLock")
 	@GroupThreads(2)
-	public void SyncObjectBackwardGetIndex(Blackhole bh) {
-		for(int i = syncObjectList.size(); --i >= 0;) {
-			bh.consume(syncObjectList.get(i));
+	public void BackportLockRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(brlList.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("BackportReadWrite")
 	@GroupThreads(2)
-	public void ReentrantLockBackwardGetIndex(Blackhole bh) {
-		for(int i = concurrentList.size(); --i >= 0;) {
-			bh.consume(concurrentList.get(i));
+	public void ReadWriteRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(brwlList.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("syncThis")
+	@Group("InternalLock")
 	@GroupThreads(2)
-	public void SyncThisBackwardRemoveIndex(Blackhole bh) {
-		for(int i = syncThisList.size(); --i >= 0;) {
-			bh.consume(syncThisList.remove(i));
+	public void InternalLockRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(lockList.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("syncObject")
+	@Group("InternalReadWrite")
 	@GroupThreads(2)
-	public void SyncObjectBackwardRemoveIndex(Blackhole bh) {
-		for(int i = syncObjectList.size(); --i >= 0;) {
+	public void InternalReadWriteRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(lockList.remove(i));
+		}
+	}
+	@Benchmark
+	@Group("SynchronizedObject")
+	@GroupThreads(2)
+	public void SynchronizedObjectRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
 			bh.consume(syncObjectList.remove(i));
 		}
 	}
 	@Benchmark
-	@Group("reentrantLock")
+	@Group("SynchronizedThis")
 	@GroupThreads(2)
-	public void ReentrantLockBackwardRemoveIndex(Blackhole bh) {
-		for(int i = concurrentList.size(); --i >= 0;) {
-			bh.consume(concurrentList.remove(i));
+	public void SynchronizedThisRemove(Blackhole bh) {
+		for(int i = iterations; --i >= 0;) {
+			bh.consume(syncThisList.remove(i));
 		}
 	}
 	public static void main(String[] args) throws RunnerException {

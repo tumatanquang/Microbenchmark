@@ -1,24 +1,24 @@
 package uc.util;
 import javolution.util.FastTable;
-public class SynchronizedObjectMutexFastTable<E> extends FastTable<E> {
+public class SynchronizedThisFastTable<E> extends FastTable<E> {
 	private static final long serialVersionUID = 4288709377943772618L;
-	public SynchronizedObjectMutexFastTable() {
+	public SynchronizedThisFastTable() {
 		super();
 	}
-	public SynchronizedObjectMutexFastTable(int capacity) {
+	public SynchronizedThisFastTable(int capacity) {
 		super(capacity);
 	}
 	@Override
-	public final SynchronizedObjectMutexFastTable<E> shared() {
+	public final SynchronizedThisFastTable<E> shared() {
 		return new Shared<E>(this);
 	}
-	private static final class Shared<E> extends SynchronizedObjectMutexFastTable<E> {
+	private static final class Shared<E> extends SynchronizedThisFastTable<E> {
 		private static final long serialVersionUID = -6167239388106998276L;
-		private final SynchronizedObjectMutexFastTable<E> table;
+		private final SynchronizedThisFastTable<E> table;
 		private final Object mutex;
-		private Shared(SynchronizedObjectMutexFastTable<E> target) {
+		private Shared(SynchronizedThisFastTable<E> target) {
 			table = target;
-			mutex = new Object();
+			mutex = this;
 		}
 		@Override
 		public boolean add(E value) {
