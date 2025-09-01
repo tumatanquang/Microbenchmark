@@ -36,9 +36,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build JMH benchmarks
-        run: |
-          mvn install:install-file -Dfile=lib/javolution-5.6.9_6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.6.9 -Dpackaging=jar
-          mvn clean install
+        run: mvn clean install
 
       - name: Run JMH Benchmarks
         run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkMultiThreadFastTable"
