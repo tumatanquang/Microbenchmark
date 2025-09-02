@@ -3,8 +3,6 @@ import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Group;
-import org.openjdk.jmh.annotations.GroupThreads;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
@@ -13,6 +11,7 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Threads;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -27,7 +26,8 @@ import uc.util.SynchronizedObjectFastTable;
 import uc.util.SynchronizedThisFastTable;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@State(Scope.Group)
+@State(Scope.Benchmark)
+@Threads(Threads.MAX)
 @Fork(1)
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
@@ -55,8 +55,6 @@ public class BenchmarkMultiThreadFastTable {
 		syncThisTable = new SynchronizedThisFastTable<Double>().shared();
 	}
 	@Benchmark
-	@Group("BackportLock")
-	@GroupThreads(2)
 	public void BackportLock(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			brlTable.add(randomValues[i]);
@@ -69,8 +67,6 @@ public class BenchmarkMultiThreadFastTable {
 		}
 	}
 	@Benchmark
-	@Group("BackportReadWrite")
-	@GroupThreads(2)
 	public void ReadWrite(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			brwlTable.add(randomValues[i]);
@@ -83,8 +79,6 @@ public class BenchmarkMultiThreadFastTable {
 		}
 	}
 	@Benchmark
-	@Group("InternalLock")
-	@GroupThreads(2)
 	public void InternalLock(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			lockTable.add(randomValues[i]);
@@ -97,8 +91,6 @@ public class BenchmarkMultiThreadFastTable {
 		}
 	}
 	@Benchmark
-	@Group("InternalReadWrite")
-	@GroupThreads(2)
 	public void InternalReadWrite(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			rwlTable.add(randomValues[i]);
@@ -111,8 +103,6 @@ public class BenchmarkMultiThreadFastTable {
 		}
 	}
 	@Benchmark
-	@Group("SynchronizedObject")
-	@GroupThreads(2)
 	public void SynchronizedObject(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			syncObjectTable.add(randomValues[i]);
@@ -125,8 +115,6 @@ public class BenchmarkMultiThreadFastTable {
 		}
 	}
 	@Benchmark
-	@Group("SynchronizedThis")
-	@GroupThreads(2)
 	public void SynchronizedThis(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			syncThisTable.add(randomValues[i]);

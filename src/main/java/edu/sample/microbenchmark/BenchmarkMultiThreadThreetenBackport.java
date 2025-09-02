@@ -25,7 +25,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkMultiThreadThreetenBackport {
-	@Param({"1000", "10000", "100000", "1000000", "10000000"})
+	@Param({"10000", "100000", "1000000", "10000000", "100000000"})
 	public int iterations;
 	@Benchmark
 	public void SystemCurrentTimeMillis(Blackhole bh) {

@@ -1,4 +1,4 @@
-name: 【Multi-threaded】 Benchmark Threeten Backport vs JDK APIs
+name: 【Multi-threaded】 Benchmark Threeten Backport vs JDK 8 APIs
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '8'
-          distribution: 'temurin'
+          distribution: 'oracle'
 
       - name: Set up Maven Cache
         uses: actions/cache@v4
