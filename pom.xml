@@ -60,45 +60,6 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>3.1.4</version>
-				<executions>
-					<execution>
-						<id>install-javolution</id>
-						<phase>clean</phase>
-						<configuration>
-							<file>${pom.basedir}/lib/javolution-5.6.9_6.jar</file>
-							<repositoryLayout>default</repositoryLayout>
-							<groupId>javolution</groupId>
-							<artifactId>javolution</artifactId>
-							<version>5.6.9</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>install-jOSClock</id>
-						<phase>clean</phase>
-						<configuration>
-							<file>${pom.basedir}/lib/osclock-universal.jar</file>
-							<repositoryLayout>default</repositoryLayout>
-							<groupId>uc.j</groupId>
-							<artifactId>jOSClock</artifactId>
-							<version>1.0.3</version>
-							<packaging>jar</packaging>
-							<generatePom>true</generatePom>
-						</configuration>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.14.1</version>
 				<configuration>

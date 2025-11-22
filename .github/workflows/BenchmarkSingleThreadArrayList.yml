@@ -40,9 +40,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Install JMH dependencies
+        run: |
+          mvn install:install-file -Dfile=lib/javolution-5.6.9_6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.6.9 -Dpackaging=jar
+          mvn install:install-file -Dfile=lib/osclock-universal.jar -DgroupId=uc.j -DartifactId=jOSClock -Dversion=1.0.3 -Dpackaging=jar
+
       - name: Build JMH benchmarks
         run: mvn clean install
 
-      - name: Run JMH Benchmarks
+      - name: Run JMH benchmarks
         shell: bash
         run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkSingleThreadArrayList"
