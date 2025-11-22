@@ -1,5 +1,5 @@
 package ec.util;
-final class TimeUtils {
+public final class TimeUtils {
 	private TimeUtils() {}
 	private static final long BASE_MILLIS = System.currentTimeMillis();
 	private static final long BASE_NANOS = System.nanoTime();
