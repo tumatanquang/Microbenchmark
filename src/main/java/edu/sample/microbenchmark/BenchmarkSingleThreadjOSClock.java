@@ -18,8 +18,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import uc.j.OSClock;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@State(Scope.Thread)
-@Fork(1)
+@State(Scope.Benchmark)
+@Fork(2)
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkSingleThreadjOSClock {
@@ -32,15 +32,15 @@ public class BenchmarkSingleThreadjOSClock {
 		}
 	}
 	@Benchmark
-	public void SystemNanoTime(Blackhole bh) {
-		for(int i = 0; i < iterations; ++i) {
-			bh.consume(System.nanoTime());
-		}
-	}
-	@Benchmark
 	public void OSClockTimeMills(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			bh.consume(OSClock.currentTimeMillis());
+		}
+	}
+	@Benchmark
+	public void SystemNanoTime(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(System.nanoTime());
 		}
 	}
 	@Benchmark
