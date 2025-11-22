@@ -23,6 +23,15 @@
 					<groupId>javolution</groupId>
 					<artifactId>javolution</artifactId>
 					<version>5.6.9</version>
+					<scope>system</scope>
+					<systemPath>${pom.basedir}/lib/javolution-5.6.9_6.jar</systemPath>
+				</dependency>
+				<dependency>
+					<groupId>uc.j</groupId>
+					<artifactId>jOSClock</artifactId>
+					<version>1.0.3</version>
+					<scope>system</scope>
+					<systemPath>${pom.basedir}/lib/osclock-universal.jar</systemPath>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -59,7 +68,7 @@
 				<version>3.1.4</version>
 				<executions>
 					<execution>
-						<id>install-external</id>
+						<id>install-javolution</id>
 						<phase>clean</phase>
 						<configuration>
 							<file>${pom.basedir}/lib/javolution-5.6.9_6.jar</file>
@@ -74,12 +83,28 @@
 							<goal>install-file</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>install-jOSClock</id>
+						<phase>clean</phase>
+						<configuration>
+							<file>${pom.basedir}/lib/osclock-universal.jar</file>
+							<repositoryLayout>default</repositoryLayout>
+							<groupId>uc.j</groupId>
+							<artifactId>jOSClock</artifactId>
+							<version>1.0.3</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.0</version>
+				<version>3.14.1</version>
 				<configuration>
 					<source>${javac.target}</source>
 					<target>${javac.target}</target>
@@ -88,7 +113,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>3.6.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>

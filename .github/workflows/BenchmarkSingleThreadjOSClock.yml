@@ -1,16 +1,16 @@
-name: 【Multi-threaded】 Benchmark MersenneTwister
+name: 【Single-threaded】 Benchmark jOSClock vs System
 
 on:
   push:
     branches:
       - main
     paths:
-      - src/main/java/edu/sample/microbenchmark/BenchmarkMultiThreadMersenneTwister.java
+      - src/main/java/edu/sample/microbenchmark/BenchmarkSingleThreadjOSClock.java
   pull_request:
     branches:
       - main
     paths:
-      - src/main/java/edu/sample/microbenchmark/BenchmarkMultiThreadMersenneTwister.java
+      - src/main/java/edu/sample/microbenchmark/BenchmarkSingleThreadjOSClock.java
   workflow_dispatch:
 
 jobs:
@@ -43,4 +43,4 @@ jobs:
         run: mvn clean install
 
       - name: Run JMH Benchmarks
-        run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkMultiThreadMersenneTwister"
+        run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkSingleThreadjOSClock"

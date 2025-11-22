@@ -17,6 +17,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import ec.util.TimeUtils;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
@@ -25,12 +26,20 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkMultiThreadThreetenBackport {
+	private static final java.time.Clock TIME_CLOCK = java.time.Clock.systemUTC();
+	private static final org.threeten.bp.Clock THREETEN_CLOCK = org.threeten.bp.Clock.systemUTC();
 	@Param({"10000", "100000", "1000000", "10000000", "100000000"})
 	public int iterations;
 	@Benchmark
 	public void SystemCurrentTimeMillis(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
 			bh.consume(System.currentTimeMillis());
+		}
+	}
+	@Benchmark
+	public void NanoTimeCurrentTimeMillis(Blackhole bh) {
+		for(int i = -1; ++i < iterations;) {
+			bh.consume(TimeUtils.currentTimeMillis());
 		}
 	}
 	@Benchmark
@@ -42,25 +51,25 @@ public class BenchmarkMultiThreadThreetenBackport {
 	@Benchmark
 	public void ThreeTenBackportClock(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
-			bh.consume(java.time.Clock.systemUTC().millis());
+			bh.consume(THREETEN_CLOCK.millis());
 		}
 	}
 	@Benchmark
 	public void JavaTimeClock(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
-			bh.consume(org.threeten.bp.Clock.systemUTC().millis());
+			bh.consume(TIME_CLOCK.millis());
 		}
 	}
 	@Benchmark
 	public void ThreeTenBackportInstant(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
-			bh.consume(java.time.Instant.now().toEpochMilli());
+			bh.consume(org.threeten.bp.Instant.now().toEpochMilli());
 		}
 	}
 	@Benchmark
 	public void JavaTimeInstance(Blackhole bh) {
 		for(int i = -1; ++i < iterations;) {
-			bh.consume(org.threeten.bp.Instant.now().toEpochMilli());
+			bh.consume(java.time.Instant.now().toEpochMilli());
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
