@@ -23,15 +23,11 @@
 					<groupId>javolution</groupId>
 					<artifactId>javolution</artifactId>
 					<version>5.6.9</version>
-					<scope>system</scope>
-					<systemPath>${pom.basedir}/lib/javolution-5.6.9_6.jar</systemPath>
 				</dependency>
 				<dependency>
 					<groupId>uc.j</groupId>
 					<artifactId>jOSClock</artifactId>
 					<version>1.0.3</version>
-					<scope>system</scope>
-					<systemPath>${pom.basedir}/lib/osclock-universal.jar</systemPath>
 				</dependency>
 			</dependencies>
 		</profile>

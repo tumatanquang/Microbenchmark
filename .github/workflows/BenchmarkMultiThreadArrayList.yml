@@ -44,4 +44,5 @@ jobs:
         run: mvn clean install
 
       - name: Run JMH Benchmarks
+        shell: bash
         run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkMultiThreadArrayList"
