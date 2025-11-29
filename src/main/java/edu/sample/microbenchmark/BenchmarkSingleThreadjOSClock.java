@@ -20,8 +20,8 @@ import uc.j.OSClock;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 @Fork(2)
-@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Warmup(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkSingleThreadjOSClock {
 	@Param({"1000", "10000", "100000", "1000000", "10000000", "100000000"})
 	public int iterations;
@@ -47,6 +47,18 @@ public class BenchmarkSingleThreadjOSClock {
 	public void OSClockNanoTime(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			bh.consume(OSClock.nanoTime());
+		}
+	}
+	@Benchmark
+	public void OSClockBetaNanoTime(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(OSClock.betaNanoTime());
+		}
+	}
+	@Benchmark
+	public void OSClockBetaMillisTime(Blackhole bh) {
+		for(int i = 0; i < iterations; ++i) {
+			bh.consume(OSClock.betaMillisTime());
 		}
 	}
 	@Benchmark
