@@ -50,15 +50,9 @@ public class BenchmarkSingleThreadjOSClock {
 		}
 	}
 	@Benchmark
-	public void OSClockBetaNanoTime(Blackhole bh) {
+	public void OSClockGetNanoTime(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
-			bh.consume(OSClock.betaNanoTime());
-		}
-	}
-	@Benchmark
-	public void OSClockBetaMillisTime(Blackhole bh) {
-		for(int i = 0; i < iterations; ++i) {
-			bh.consume(OSClock.betaMillisTime());
+			bh.consume(OSClock.currentTimeNanos());
 		}
 	}
 	@Benchmark
