@@ -24,7 +24,7 @@ import uc.j.OSClock;
 @State(Scope.Benchmark)
 @Warmup(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
-public class BenchmarkSingleThreadjOSClock {
+public class BenchmarkMultiThreadedjOSClock {
 	@Param({"10000", "100000", "1000000", "10000000", "100000000", "1000000000"})
 	public int iterations;
 	@Benchmark
@@ -76,7 +76,7 @@ public class BenchmarkSingleThreadjOSClock {
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder().include(BenchmarkSingleThreadjOSClock.class.getSimpleName()).threads(Runtime.getRuntime().availableProcessors()).build();
+		Options opt = new OptionsBuilder().include(BenchmarkMultiThreadedjOSClock.class.getSimpleName()).threads(Runtime.getRuntime().availableProcessors()).build();
 		new Runner(opt).run();
 	}
 }
