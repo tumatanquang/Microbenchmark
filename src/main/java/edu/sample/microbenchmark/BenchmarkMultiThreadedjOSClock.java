@@ -9,6 +9,7 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Threads;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -18,12 +19,13 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import uc.j.OSClock;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@State(Scope.Benchmark)
+@Threads(Threads.MAX)
 @Fork(2)
+@State(Scope.Benchmark)
 @Warmup(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkSingleThreadjOSClock {
-	@Param({"1000", "10000", "100000", "1000000", "10000000", "100000000"})
+	@Param({"10000", "100000", "1000000", "10000000", "100000000", "1000000000"})
 	public int iterations;
 	@Benchmark
 	public void SystemTimeMillis(Blackhole bh) {
@@ -50,19 +52,19 @@ public class BenchmarkSingleThreadjOSClock {
 		}
 	}
 	@Benchmark
-	public void OSClockGetNanoTime(Blackhole bh) {
+	public void OSClockMonotonicNanos(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
-			bh.consume(OSClock.currentTimeNanos());
+			bh.consume(OSClock.monotonicNanos());
 		}
 	}
 	@Benchmark
 	public void OSClockEpochMillis(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
-			bh.consume(OSClock.getEpochMillis());
+			bh.consume(OSClock.epochMillis());
 		}
 	}
 	@Benchmark
-	public void SystemSecondDiv(Blackhole bh) {
+	public void SystemSecondDivide(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
 			bh.consume(System.currentTimeMillis() / 1000L);
 		}
@@ -70,11 +72,11 @@ public class BenchmarkSingleThreadjOSClock {
 	@Benchmark
 	public void OSClockEpochSecond(Blackhole bh) {
 		for(int i = 0; i < iterations; ++i) {
-			bh.consume(OSClock.getEpochSecond());
+			bh.consume(OSClock.epochSeconds());
 		}
 	}
 	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder().include(BenchmarkSingleThreadjOSClock.class.getSimpleName()).build();
+		Options opt = new OptionsBuilder().include(BenchmarkSingleThreadjOSClock.class.getSimpleName()).threads(Runtime.getRuntime().availableProcessors()).build();
 		new Runner(opt).run();
 	}
 }

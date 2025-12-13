@@ -1,4 +1,4 @@
-name: 【Single-threaded】 Benchmark jOSClock vs System
+name: 【Multi-threaded】 Benchmark jOSClock vs System
 
 on:
   push:
@@ -51,4 +51,4 @@ jobs:
 
       - name: Run JMH benchmarks
         shell: bash
-        run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkSingleThreadjOSClock"
+        run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/benchmarks.jar BenchmarkMultiThreadedjOSClock"
