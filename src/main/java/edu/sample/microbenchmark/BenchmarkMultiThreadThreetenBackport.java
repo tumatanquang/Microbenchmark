@@ -23,8 +23,8 @@ import ec.util.TimeUtils;
 @State(Scope.Benchmark)
 @Threads(Threads.MAX)
 @Fork(1)
-@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Warmup(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 10, time = 2, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkMultiThreadThreetenBackport {
 	private static final java.time.Clock TIME_CLOCK = java.time.Clock.systemUTC();
 	private static final org.threeten.bp.Clock THREETEN_CLOCK = org.threeten.bp.Clock.systemUTC();

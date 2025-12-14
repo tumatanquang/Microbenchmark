@@ -25,8 +25,8 @@ import ec.util.MersenneTwisterFast;
 @State(Scope.Benchmark)
 @Threads(Threads.MAX)
 @Fork(1)
-@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Warmup(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 10, time = 2, timeUnit = TimeUnit.SECONDS)
 public class BenchmarkMultiThreadMersenneTwister {
 	public MersenneTwister MT_RAND;
 	public static MersenneTwister MT_SRAND;
