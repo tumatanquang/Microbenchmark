@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - src/main/java/edu/sample/microbenchmark/BenchmarkSingleThreadjOSClock.java
+      - src/main/java/edu/sample/microbenchmark/BenchmarkMultiThreadjOSClock.java
   pull_request:
     branches:
       - main
     paths:
-      - src/main/java/edu/sample/microbenchmark/BenchmarkSingleThreadjOSClock.java
+      - src/main/java/edu/sample/microbenchmark/BenchmarkMultiThreadjOSClock.java
   workflow_dispatch:
 
 jobs:
