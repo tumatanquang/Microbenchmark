@@ -24,7 +24,8 @@ import uc.j.OSClock;
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class BenchmarkMultiThreadjOSClock {
-	private static final int BATCH_SIZE = 1_000_000;
+	private static final int BATCH_SIZE = 10_000_000;
+	private static final java.time.Clock CLOCK = java.time.Clock.systemUTC();
 	@Setup(Level.Trial)
 	public void warmJNI() {
 		for(int i = 0; i < 10_000; ++i) {
@@ -33,12 +34,6 @@ public class BenchmarkMultiThreadjOSClock {
 			OSClock.epochMillis();
 			OSClock.epochSeconds();
 		}
-	}
-	@Benchmark
-	@Warmup(iterations = 5, batchSize = BATCH_SIZE)
-	@Measurement(iterations = 10, batchSize = BATCH_SIZE)
-	public void EmptyBaseline(Blackhole bh) {
-		bh.consume(0L);
 	}
 	@Benchmark
 	@Warmup(iterations = 5, batchSize = BATCH_SIZE)
@@ -75,6 +70,12 @@ public class BenchmarkMultiThreadjOSClock {
 	@Measurement(iterations = 10, batchSize = BATCH_SIZE)
 	public void OSClockEpochMillis(Blackhole bh) {
 		bh.consume(OSClock.epochMillis());
+	}
+	@Benchmark
+	@Warmup(iterations = 5, batchSize = BATCH_SIZE)
+	@Measurement(iterations = 10, batchSize = BATCH_SIZE)
+	public void JavaTimeMillis(Blackhole bh) {
+		bh.consume(CLOCK.millis());
 	}
 	@Benchmark
 	@Warmup(iterations = 5, batchSize = BATCH_SIZE)

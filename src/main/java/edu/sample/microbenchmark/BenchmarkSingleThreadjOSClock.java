@@ -10,7 +10,6 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Threads;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -18,13 +17,13 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import uc.j.OSClock;
-@Threads(1)
 @Fork(3)
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class BenchmarkSingleThreadjOSClock {
-	private static final int BATCH_SIZE = 1_000_000;
+	private static final int BATCH_SIZE = 10_000_000;
+	private static final java.time.Clock CLOCK = java.time.Clock.systemUTC();
 	@Setup(Level.Trial)
 	public void warmJNI() {
 		for(int i = 0; i < 10_000; ++i) {
@@ -33,12 +32,6 @@ public class BenchmarkSingleThreadjOSClock {
 			OSClock.epochMillis();
 			OSClock.epochSeconds();
 		}
-	}
-	@Benchmark
-	@Warmup(iterations = 5, batchSize = BATCH_SIZE)
-	@Measurement(iterations = 10, batchSize = BATCH_SIZE)
-	public void EmptyBaseline(Blackhole bh) {
-		bh.consume(0L);
 	}
 	@Benchmark
 	@Warmup(iterations = 5, batchSize = BATCH_SIZE)
@@ -75,6 +68,12 @@ public class BenchmarkSingleThreadjOSClock {
 	@Measurement(iterations = 10, batchSize = BATCH_SIZE)
 	public void OSClockEpochMillis(Blackhole bh) {
 		bh.consume(OSClock.epochMillis());
+	}
+	@Benchmark
+	@Warmup(iterations = 5, batchSize = BATCH_SIZE)
+	@Measurement(iterations = 10, batchSize = BATCH_SIZE)
+	public void JavaTimeMillis(Blackhole bh) {
+		bh.consume(CLOCK.millis());
 	}
 	@Benchmark
 	@Warmup(iterations = 5, batchSize = BATCH_SIZE)
