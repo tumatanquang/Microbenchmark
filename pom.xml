@@ -22,7 +22,7 @@
 				<dependency>
 					<groupId>javolution</groupId>
 					<artifactId>javolution</artifactId>
-					<version>5.6.9</version>
+					<version>5.7.0</version>
 				</dependency>
 				<dependency>
 					<groupId>uc.j</groupId>

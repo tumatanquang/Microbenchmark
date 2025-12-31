@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -33,7 +33,7 @@ jobs:
           distribution: corretto
 
       - name: Set up Maven Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -43,7 +43,7 @@ jobs:
       - name: Install JMH dependencies
         shell: bash
         run: |
-          mvn install:install-file -Dfile=lib/javolution-5.6.9_6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.6.9 -Dpackaging=jar
+          mvn install:install-file -Dfile=lib/javolution-5.7.0_jdk6.jar -DgroupId=javolution -DartifactId=javolution -Dversion=5.7.0 -Dpackaging=jar
           mvn install:install-file -Dfile=lib/osclock-universal.jar -DgroupId=uc.j -DartifactId=jOSClock -Dversion=1.1.1 -Dpackaging=jar
 
       - name: Build JMH benchmarks
