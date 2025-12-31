@@ -1,6 +1,6 @@
 package uc.util;
 import javolution.util.FastTable;
-import javolution.util.internal.ReadWriteLockImpl;
+import javolution.util.internal.collection.FastSharedCollection;
 public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 	private static final long serialVersionUID = 2781771606854788734L;
 	public ReentrantReadWriteLockFastTable() {
@@ -16,14 +16,14 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 	private static final class Shared<E> extends ReentrantReadWriteLockFastTable<E> {
 		private static final long serialVersionUID = 29253114956268253L;
 		private final ReentrantReadWriteLockFastTable<E> table;
-		private final ReadWriteLockImpl rwLock;
+		private final FastSharedCollection rwLock;
 		private Shared(ReentrantReadWriteLockFastTable<E> target) {
 			table = target;
-			rwLock = new ReadWriteLockImpl();
+			rwLock = new FastSharedCollection();
 		}
 		@Override
 		public boolean add(E value) {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.writeLock.lock();
 			try {
 				return table.add(value);
@@ -34,7 +34,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public void clear() {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.writeLock.lock();
 			try {
 				table.clear();
@@ -45,7 +45,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public boolean contains(Object o) {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.readLock.lock();
 			try {
 				return table.contains(o);
@@ -56,7 +56,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public E get(int index) {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.readLock.lock();
 			try {
 				return table.get(index);
@@ -67,7 +67,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public int indexOf(Object o) {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.readLock.lock();
 			try {
 				return table.indexOf(o);
@@ -78,7 +78,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public boolean isEmpty() {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.readLock.lock();
 			try {
 				return table.isEmpty();
@@ -89,7 +89,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public E remove(int index) {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.writeLock.lock();
 			try {
 				return table.remove(index);
@@ -100,7 +100,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public boolean remove(Object o) {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.writeLock.lock();
 			try {
 				return table.remove(o);
@@ -111,7 +111,7 @@ public class ReentrantReadWriteLockFastTable<E> extends FastTable<E> {
 		}
 		@Override
 		public int size() {
-			final ReadWriteLockImpl lock = rwLock;
+			final FastSharedCollection lock = rwLock;
 			lock.readLock.lock();
 			try {
 				return table.size();
